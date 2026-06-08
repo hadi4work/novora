@@ -51,7 +51,7 @@ export default async function DashboardLayout({
       <Sidebar plan={userProfile.plan} />
       <div className="flex flex-1 flex-col">
         <header className="flex h-16 items-center justify-between border-b px-4 lg:px-6">
-          <MobileNav />
+          <MobileNav plan={userProfile.plan} />
           <div className="flex items-center gap-2 ml-auto">
             <span className="text-sm text-muted-foreground hidden sm:inline">
               {userProfile.full_name ?? userProfile.email}
