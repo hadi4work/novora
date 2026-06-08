@@ -307,7 +307,7 @@ export const ar: Messages = {
       },
       {
         question: "ما طرق الدفع المتاحة؟",
-        answer: "نقبل Visa وMastercard وApple Pay وGoogle Pay عبر NexaPay. الدفع آمن ويفعّل خطتك لمدة 30 يوماً.",
+        answer: "نقبل Bitcoin عبر BTCPay Server. الدفع آمن ومُتحقق على البلوكشين، وتُفعَّل خطتك تلقائياً لمدة 30 يوماً.",
       },
       {
         question: "هل يمكنني الإلغاء في أي وقت؟",
@@ -405,7 +405,7 @@ export const ar: Messages = {
     failed: "فشل الدفع",
     failedDesc: "حاول مرة أخرى من صفحة الأسعار.",
     processing: "الدفع قيد المعالجة",
-    processingDesc: "ستُفعَّل خطتك عند تأكيد NexaPay.",
+    processingDesc: "تأكيد Bitcoin قد يستغرق دقائق. تُفعَّل خطتك تلقائياً عند تأكيد BTCPay.",
     received: "تم استلام الدفع!",
     receivedDesc: "ستُحدَّث خطتك بعد التأكيد.",
   },

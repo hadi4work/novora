@@ -305,7 +305,7 @@ export const en = {
       },
       {
         question: "What payment methods do you accept?",
-        answer: "We accept Visa, Mastercard, Apple Pay, and Google Pay via NexaPay. Payments are processed securely and activate your plan for 30 days.",
+        answer: "We accept Bitcoin via BTCPay Server. Payments are secure, on-chain verified, and your plan activates automatically for 30 days.",
       },
       {
         question: "Can I cancel anytime?",
@@ -402,8 +402,8 @@ export const en = {
     welcomePlan: "Welcome to {plan}!",
     failed: "Payment failed",
     failedDesc: "Please try again from the pricing page.",
-    processing: "Payment still processing",
-    processingDesc: "Your plan will activate once NexaPay confirms payment.",
+    processing: "Payment processing",
+    processingDesc: "Bitcoin confirmation can take a few minutes. Your plan activates automatically once BTCPay confirms payment.",
     received: "Payment received!",
     receivedDesc: "Your plan will update shortly after confirmation.",
   },

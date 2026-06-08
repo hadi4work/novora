@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient, createServiceClient } from "@/lib/auth/supabase-server";
 import {
-  cancelSubscription,
   createCheckout,
   createPendingPayment,
   createPortal,
@@ -34,7 +33,7 @@ export async function startCheckout(plan: "pro" | "business") {
 
   let paymentRef: string | undefined;
 
-  if (provider === "nexapay") {
+  if (provider === "btcpay") {
     paymentRef = await createPendingPayment({
       userId: user.id,
       plan,
@@ -83,7 +82,7 @@ export async function openBillingPortal(): Promise<{ url?: string; error?: strin
 
   if (
     subscription.provider === "manual" ||
-    subscription.provider === "nexapay" ||
+    subscription.provider === "btcpay" ||
     !subscription.provider_customer_id
   ) {
     return { url: "/pricing" };
@@ -112,13 +111,6 @@ export async function cancelUserSubscription() {
     .maybeSingle();
 
   if (!subscription) return { error: "No active subscription found." };
-
-  if (
-    subscription.provider_subscription_id &&
-    subscription.provider === "lemonsqueezy"
-  ) {
-    await cancelSubscription(subscription.provider_subscription_id);
-  }
 
   await serviceClient
     .from("subscriptions")

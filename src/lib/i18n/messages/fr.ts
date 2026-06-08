@@ -270,7 +270,7 @@ export const fr: Messages = {
     },
     faqs: [
       { question: "Puis-je essayer Novora gratuitement ?", answer: "Oui. Le forfait gratuit inclut 3 générations IA par jour. Aucune carte requise." },
-      { question: "Quels moyens de paiement acceptez-vous ?", answer: "Visa, Mastercard, Apple Pay et Google Pay via NexaPay. Paiement sécurisé, plan actif 30 jours." },
+      { question: "Quels moyens de paiement acceptez-vous ?", answer: "Bitcoin via BTCPay Server. Paiement sécurisé, vérifié on-chain, plan activé automatiquement 30 jours." },
       { question: "Puis-je annuler à tout moment ?", answer: "Oui. Annulez depuis les paramètres. Le forfait payant dure 30 jours par paiement et se renouvelle manuellement." },
       { question: "Quelle différence entre Pro et Business ?", answer: "Business inclut tout Pro plus priorité, modèles premium et fonctions équipe à venir." },
     ],
@@ -343,7 +343,7 @@ export const fr: Messages = {
     failed: "Échec du paiement",
     failedDesc: "Réessayez depuis la page tarifs.",
     processing: "Paiement en cours",
-    processingDesc: "Votre forfait s'activera après confirmation NexaPay.",
+    processingDesc: "La confirmation Bitcoin peut prendre quelques minutes. Forfait activé automatiquement par BTCPay.",
     received: "Paiement reçu !",
     receivedDesc: "Votre forfait sera mis à jour sous peu.",
   },

@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { useTranslations } from "@/components/providers/locale-provider";
 import type { Plan } from "@/types";
 
-export function Sidebar({ plan }: { plan: Plan }) {
+export function Sidebar({ plan, isAdmin = false }: { plan: Plan; isAdmin?: boolean }) {
   const pathname = usePathname();
   const { t } = useTranslations("nav");
   const { t: tc } = useTranslations("common");

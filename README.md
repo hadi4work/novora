@@ -7,7 +7,7 @@ AI-powered content SaaS — social media posts, product descriptions, and resume
 - **Next.js 16** (App Router) + TypeScript + Tailwind v4 + Shadcn UI
 - **Supabase** — Auth, PostgreSQL, Edge Functions
 - **Groq** — AI via Supabase Edge Function (`generate`)
-- **NexaPay** — Payments (card/Apple Pay → USDT TRC20; manual renewal every 30 days)
+- **BTCPay Server** — Bitcoin payments (webhook auto-activation, 30-day manual renewal)
 - **Vercel** — Recommended hosting
 
 ## Quick start
@@ -49,12 +49,11 @@ See `.env.local.example` for the full list.
 | `SUPABASE_SERVICE_ROLE_KEY` | Yes | Server-only, never expose |
 | `NEXT_PUBLIC_APP_URL` | Yes | `http://localhost:3000` in dev |
 | `GROQ_API_KEY` | Yes | Set in **Supabase secrets**, not `.env.local` |
-| `PAYMENT_PROVIDER` | Prod | Use `nexapay` in production |
-| `NEXAPAY_API_URL` | Prod | Wallet POST endpoint from NexaPay support |
-| `NEXAPAY_WALLET_ADDRESS` | Prod | Your Binance USDT TRC20 wallet address |
-| `NEXAPAY_NETWORK` | Prod | `TRC20` (default) |
-| `NEXAPAY_WEBHOOK_SECRET` | Optional | Webhook signature verification |
-| `LEMONSQUEEZY_*` | Legacy | Optional fallback provider |
+| `PAYMENT_PROVIDER` | Prod | Use `btcpay` in production |
+| `BTCPAY_URL` | Prod | Your BTCPay Server base URL |
+| `BTCPAY_API_KEY` | Prod | Greenfield API key |
+| `BTCPAY_STORE_ID` | Prod | Store ID from BTCPay |
+| `BTCPAY_WEBHOOK_SECRET` | Prod | Webhook signing secret |
 | `UPSTASH_REDIS_*` | Prod | Rate limiting |
 | `RESEND_API_KEY` | Optional | Contact form emails |
 
@@ -83,33 +82,33 @@ NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-xxxxxxxxxx
 NEXT_PUBLIC_ADSENSE_REWARDED_SLOT=your-video-ad-unit-id
 ```
 
-### NexaPay setup (production)
+### BTCPay Server setup (production)
 
-NexaPay is a good fit for regions with limited banking access (e.g. Syria): customers pay by card, you receive USDT on a Binance TRC20 wallet.
-
-1. Get your **NexaPay API URL** from NexaPay support (not the placeholder `pythonanywhere.com` example).
-2. Set up a **Binance USDT TRC20** wallet and copy the address into `NEXAPAY_WALLET_ADDRESS`.
-3. In `.env.local` / Vercel env:
+1. Deploy or use a **BTCPay Server** instance (self-hosted VPS recommended).
+2. Create a **Store** and connect a Bitcoin wallet.
+3. Generate a **Greenfield API key** with invoice creation permissions.
+4. Register webhook: `https://your-domain.com/api/webhooks/btcpay`
+   - Events: `InvoiceSettled`, `InvoicePaymentSettled`, `InvoiceExpired`
+5. In `.env.local` / Vercel:
    ```env
-   PAYMENT_PROVIDER=nexapay
-   NEXT_PUBLIC_PAYMENT_PROVIDER=nexapay
-   NEXAPAY_API_URL=https://your-real-nexapay-endpoint
-   NEXAPAY_WALLET_ADDRESS=your-trc20-address
-   NEXAPAY_NETWORK=TRC20
+   PAYMENT_PROVIDER=btcpay
+   NEXT_PUBLIC_PAYMENT_PROVIDER=btcpay
+   BTCPAY_URL=https://your-btcpay-server.com
+   BTCPAY_API_KEY=your-api-key
+   BTCPAY_STORE_ID=your-store-id
+   BTCPAY_WEBHOOK_SECRET=your-webhook-secret
    ```
-4. Register the webhook with NexaPay:
-   `https://your-domain.com/api/webhooks/payments/nexapay`
-5. Test a **$15 Pro** upgrade: user is redirected to NexaPay → pays → webhook activates Pro for 30 days.
+6. Test a **$15 Pro** upgrade: user → BTCPay checkout → pays Bitcoin → webhook activates Pro for 30 days.
 
-**Billing model:** NexaPay handles one-time payments, not auto-recurring billing. Users renew manually from Pricing or Settings when their plan expires.
+**Billing model:** One-time invoices, not auto-recurring. Users renew manually from Pricing or Settings.
 
 ## Deploy to Vercel
 
 1. Push repo to GitHub
 2. Import project in Vercel
 3. Add all env vars from `.env.local.example`
-4. Set `PAYMENT_PROVIDER=nexapay` and NexaPay vars for production
-5. Configure NexaPay webhook: `https://your-domain.com/api/webhooks/payments/nexapay`
+4. Set `PAYMENT_PROVIDER=btcpay` and BTCPay vars for production
+5. Configure BTCPay webhook: `https://your-domain.com/api/webhooks/btcpay`
 6. Add production redirect URL in Supabase Auth: `https://your-domain.com/auth/callback`
 
 ## Project structure
@@ -119,21 +118,9 @@ src/
   app/           # Routes (marketing, auth, dashboard, tools)
   actions/       # Server actions
   components/    # UI components
-  lib/           # AI, auth, payments, quota, SEO
+  lib/           # Business logic, AI, payments, auth
+  types/         # Shared TypeScript types
 supabase/
   migrations/    # Database schema
-  functions/     # Edge Functions (generate)
+  functions/     # Edge functions (generate)
 ```
-
-## Scripts
-
-```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # ESLint
-```
-
-## License
-
-Private — All rights reserved.

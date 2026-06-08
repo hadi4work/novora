@@ -1,20 +1,16 @@
-import { LemonSqueezyProvider } from "@/lib/payments/providers/lemonsqueezy";
+import { BtcpayProvider } from "@/lib/payments/providers/btcpay";
 import { ManualPaymentProvider } from "@/lib/payments/providers/manual";
-import { NexaPayProvider } from "@/lib/payments/providers/nexapay";
 import type { CheckoutParams, PaymentProvider, WebhookEvent } from "@/lib/payments/types";
 import { createServiceClient } from "@/lib/auth/supabase-server";
 import { logAuditEvent } from "@/lib/audit/audit-service";
 import { PLAN_PRICES } from "@/lib/constants";
-import type { SupabaseClient } from "@supabase/supabase-js";
 
 function getProvider(): PaymentProvider {
   const providerName = process.env.PAYMENT_PROVIDER ?? "manual";
 
   switch (providerName) {
-    case "nexapay":
-      return new NexaPayProvider();
-    case "lemonsqueezy":
-      return new LemonSqueezyProvider();
+    case "btcpay":
+      return new BtcpayProvider();
     default:
       return new ManualPaymentProvider();
   }
@@ -22,10 +18,8 @@ function getProvider(): PaymentProvider {
 
 function getProviderByName(providerName: string): PaymentProvider {
   switch (providerName) {
-    case "nexapay":
-      return new NexaPayProvider();
-    case "lemonsqueezy":
-      return new LemonSqueezyProvider();
+    case "btcpay":
+      return new BtcpayProvider();
     default:
       return new ManualPaymentProvider();
   }
@@ -35,6 +29,7 @@ export async function createPendingPayment(params: {
   userId: string;
   plan: "pro" | "business";
   email: string;
+  btcpayInvoiceId?: string;
 }): Promise<string> {
   const serviceClient = createServiceClient();
   const paymentRef = crypto.randomUUID();
@@ -42,12 +37,16 @@ export async function createPendingPayment(params: {
 
   const { error } = await serviceClient.from("payments").insert({
     user_id: params.userId,
-    provider: "nexapay",
+    provider: "btcpay",
     provider_payment_id: paymentRef,
     amount_cents: amountCents,
     currency: "USD",
     status: "pending",
-    metadata: { plan: params.plan, email: params.email },
+    metadata: {
+      plan: params.plan,
+      email: params.email,
+      btcpay_invoice_id: params.btcpayInvoiceId ?? null,
+    },
   });
 
   if (error) {
@@ -57,9 +56,42 @@ export async function createPendingPayment(params: {
   return paymentRef;
 }
 
+export async function attachBtcpayInvoiceId(
+  paymentRef: string,
+  invoiceId: string
+) {
+  const serviceClient = createServiceClient();
+
+  const { data: payment } = await serviceClient
+    .from("payments")
+    .select("metadata")
+    .eq("provider", "btcpay")
+    .eq("provider_payment_id", paymentRef)
+    .maybeSingle();
+
+  if (!payment) return;
+
+  await serviceClient
+    .from("payments")
+    .update({
+      metadata: {
+        ...(payment.metadata as Record<string, unknown>),
+        btcpay_invoice_id: invoiceId,
+      },
+    })
+    .eq("provider", "btcpay")
+    .eq("provider_payment_id", paymentRef);
+}
+
 export async function createCheckout(params: CheckoutParams) {
   const provider = getProvider();
-  return provider.createCheckoutSession(params);
+  const session = await provider.createCheckoutSession(params);
+
+  if (provider.name === "btcpay" && params.paymentRef) {
+    await attachBtcpayInvoiceId(params.paymentRef, session.sessionId);
+  }
+
+  return session;
 }
 
 export async function createPortal(customerId: string) {
@@ -81,16 +113,110 @@ export function verifyWebhook(
   return provider.verifyWebhook(payload, signature);
 }
 
-async function handleNexaPayEvent(
-  event: WebhookEvent,
-  serviceClient: SupabaseClient
+export async function confirmProviderPayment(
+  provider: string,
+  paymentRef: string,
+  options?: {
+    providerPaymentId?: string;
+    source?: "webhook";
+    metadata?: Record<string, unknown>;
+  }
 ) {
-  const paymentId = event.providerEventId;
+  const serviceClient = createServiceClient();
 
   const { data: payment } = await serviceClient
     .from("payments")
     .select("*")
-    .eq("provider", "nexapay")
+    .eq("provider", provider)
+    .eq("provider_payment_id", paymentRef)
+    .maybeSingle();
+
+  if (!payment) {
+    throw new Error("Payment not found");
+  }
+
+  if (payment.status === "succeeded") {
+    return { alreadyConfirmed: true as const, payment };
+  }
+
+  const paymentMetadata = payment.metadata as {
+    plan?: "pro" | "business";
+    email?: string;
+  };
+
+  const plan = paymentMetadata.plan;
+  if (!plan) {
+    throw new Error("Payment is missing plan metadata");
+  }
+
+  const userId = payment.user_id;
+  const periodStart = new Date().toISOString();
+  const periodEnd = new Date(Date.now() + 30 * 86400000).toISOString();
+  const providerSubscriptionId = `${provider}_${paymentRef}`;
+
+  await serviceClient
+    .from("payments")
+    .update({
+      status: "succeeded",
+      metadata: {
+        ...paymentMetadata,
+        confirmed_at: new Date().toISOString(),
+        confirmation_source: options?.source ?? "webhook",
+        provider_invoice_id: options?.providerPaymentId ?? null,
+        ...(options?.metadata ?? {}),
+      },
+    })
+    .eq("id", payment.id);
+
+  await serviceClient.from("subscriptions").upsert(
+    {
+      user_id: userId,
+      plan,
+      status: "active",
+      provider,
+      provider_subscription_id: providerSubscriptionId,
+      provider_customer_id: userId,
+      current_period_start: periodStart,
+      current_period_end: periodEnd,
+      cancel_at_period_end: false,
+      metadata: options?.metadata ?? {},
+    },
+    { onConflict: "provider,provider_subscription_id" }
+  );
+
+  await serviceClient
+    .from("profiles")
+    .update({
+      plan,
+      plan_expires_at: periodEnd,
+    })
+    .eq("id", userId);
+
+  await logAuditEvent({
+    action: "payment_confirmed",
+    resourceType: "subscription",
+    resourceId: providerSubscriptionId,
+    metadata: {
+      plan,
+      provider,
+      paymentRef,
+      source: options?.source ?? "webhook",
+    },
+    userId,
+  });
+
+  return { alreadyConfirmed: false as const, payment, plan, userId };
+}
+
+async function handleBtcpayEvent(event: WebhookEvent) {
+  const paymentId = event.providerEventId;
+
+  const serviceClient = createServiceClient();
+
+  const { data: payment } = await serviceClient
+    .from("payments")
+    .select("*")
+    .eq("provider", "btcpay")
     .eq("provider_payment_id", paymentId)
     .maybeSingle();
 
@@ -100,7 +226,13 @@ async function handleNexaPayEvent(
   if (event.type === "payment.failed") {
     await serviceClient
       .from("payments")
-      .update({ status: "failed", metadata: event.metadata ?? {} })
+      .update({
+        status: "failed",
+        metadata: {
+          ...(payment.metadata as Record<string, unknown>),
+          ...(event.metadata ?? {}),
+        },
+      })
       .eq("id", payment.id);
     return;
   }
@@ -109,138 +241,22 @@ async function handleNexaPayEvent(
     return;
   }
 
-  const periodStart = event.currentPeriodStart ?? new Date().toISOString();
-  const periodEnd =
-    event.currentPeriodEnd ??
-    new Date(Date.now() + 30 * 86400000).toISOString();
-
-  await serviceClient
-    .from("payments")
-    .update({
-      status: "succeeded",
-      metadata: {
-        ...(payment.metadata as Record<string, unknown>),
-        nexapay_transaction_id: event.providerPaymentId,
-        webhook: event.metadata ?? {},
-      },
-    })
-    .eq("id", payment.id);
-
-  await serviceClient.from("subscriptions").upsert(
-    {
-      user_id: event.userId,
-      plan: event.plan,
-      status: "active",
-      provider: "nexapay",
-      provider_subscription_id: event.providerSubscriptionId!,
-      provider_customer_id: event.userId,
-      current_period_start: periodStart,
-      current_period_end: periodEnd,
-      cancel_at_period_end: false,
-      metadata: event.metadata ?? {},
-    },
-    { onConflict: "provider,provider_subscription_id" }
-  );
-
-  await serviceClient
-    .from("profiles")
-    .update({
-      plan: event.plan,
-      plan_expires_at: periodEnd,
-    })
-    .eq("id", event.userId);
-
-  await logAuditEvent({
-    action: "payment_event",
-    resourceType: "subscription",
-    resourceId: event.providerSubscriptionId,
-    metadata: { type: event.type, plan: event.plan, provider: "nexapay" },
-    userId: event.userId,
+  await confirmProviderPayment("btcpay", paymentId, {
+    providerPaymentId: event.providerPaymentId,
+    source: "webhook",
+    metadata: event.metadata ?? {},
   });
 }
 
 export async function handleSubscriptionEvent(event: WebhookEvent) {
-  if (!event.userId) return;
+  if (event.type === "payment.ignored") return;
 
-  const serviceClient = createServiceClient();
-
-  if (event.provider === "nexapay") {
-    await handleNexaPayEvent(event, serviceClient);
+  if (event.provider === "btcpay") {
+    await handleBtcpayEvent(event);
     return;
   }
 
-  const existingPayment = await serviceClient
-    .from("payments")
-    .select("id")
-    .eq("provider", event.provider)
-    .eq("provider_payment_id", event.providerEventId)
-    .eq("status", "succeeded")
-    .maybeSingle();
-
-  if (existingPayment.data) return;
-
-  if (event.type.includes("subscription") || event.type.includes("order")) {
-    if (event.providerSubscriptionId && event.plan && event.status) {
-      await serviceClient.from("subscriptions").upsert(
-        {
-          user_id: event.userId,
-          plan: event.plan,
-          status: event.status,
-          provider: event.provider,
-          provider_subscription_id: event.providerSubscriptionId,
-          provider_customer_id: event.providerCustomerId,
-          current_period_start:
-            event.currentPeriodStart ?? new Date().toISOString(),
-          current_period_end:
-            event.currentPeriodEnd ??
-            new Date(Date.now() + 30 * 86400000).toISOString(),
-          cancel_at_period_end: event.cancelAtPeriodEnd ?? false,
-          metadata: event.metadata ?? {},
-        },
-        { onConflict: "provider,provider_subscription_id" }
-      );
-
-      const activePlan =
-        event.status === "active" || event.status === "trialing"
-          ? event.plan
-          : "free";
-
-      if (activePlan !== "free") {
-        await serviceClient
-          .from("profiles")
-          .update({
-            plan: activePlan,
-            plan_expires_at: event.currentPeriodEnd,
-          })
-          .eq("id", event.userId);
-      } else if (event.status === "canceled") {
-        await serviceClient
-          .from("profiles")
-          .update({ plan: "free", plan_expires_at: null })
-          .eq("id", event.userId);
-      }
-    }
-
-    if (event.providerPaymentId && event.amountCents) {
-      await serviceClient.from("payments").insert({
-        user_id: event.userId,
-        provider: event.provider,
-        provider_payment_id: event.providerEventId,
-        amount_cents: event.amountCents,
-        currency: event.currency ?? "USD",
-        status: "succeeded",
-        metadata: event.metadata ?? {},
-      });
-    }
-
-    await logAuditEvent({
-      action: "payment_event",
-      resourceType: "subscription",
-      resourceId: event.providerSubscriptionId,
-      metadata: { type: event.type, plan: event.plan },
-      userId: event.userId,
-    });
-  }
+  if (!event.userId) return;
 }
 
 export async function getPaymentStatus(paymentRef: string, userId: string) {

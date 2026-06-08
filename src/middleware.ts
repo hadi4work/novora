@@ -1,7 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/auth/supabase-middleware";
 
-const protectedPrefixes = ["/dashboard", "/app", "/history", "/settings", "/onboarding"];
+const protectedPrefixes = [
+  "/dashboard",
+  "/app",
+  "/history",
+  "/settings",
+  "/onboarding",
+];
 const onboardingRequiredPrefixes = ["/dashboard", "/app", "/history", "/settings"];
 
 async function isOnboardingCompleted(

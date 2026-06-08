@@ -270,7 +270,7 @@ export const de: Messages = {
     },
     faqs: [
       { question: "Kann ich Novora kostenlos testen?", answer: "Ja. Der kostenlose Plan bietet 3 KI-Generierungen pro Tag. Keine Kreditkarte nötig." },
-      { question: "Welche Zahlungsmethoden?", answer: "Visa, Mastercard, Apple Pay und Google Pay über NexaPay. Plan aktiv für 30 Tage." },
+      { question: "Welche Zahlungsmethoden?", answer: "Bitcoin über BTCPay Server. Sicher, on-chain verifiziert, Plan 30 Tage automatisch aktiv." },
       { question: "Kann ich jederzeit kündigen?", answer: "Ja. Kündigung in den Einstellungen. Bezahlter Plan gilt 30 Tage pro Zahlung, manuelle Verlängerung." },
       { question: "Unterschied Pro und Business?", answer: "Business enthält alles aus Pro plus Priorität, Premium-Vorlagen und kommende Team-Funktionen." },
     ],
@@ -343,7 +343,7 @@ export const de: Messages = {
     failed: "Zahlung fehlgeschlagen",
     failedDesc: "Erneut von der Preisseite versuchen.",
     processing: "Zahlung wird verarbeitet",
-    processingDesc: "Plan wird nach NexaPay-Bestätigung aktiviert.",
+    processingDesc: "Bitcoin-Bestätigung kann einige Minuten dauern. Plan wird automatisch von BTCPay aktiviert.",
     received: "Zahlung erhalten!",
     receivedDesc: "Plan wird nach Bestätigung aktualisiert.",
   },

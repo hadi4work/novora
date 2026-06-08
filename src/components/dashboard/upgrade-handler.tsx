@@ -57,8 +57,9 @@ export function UpgradeHandler() {
         if (attempts < maxAttempts) {
           setTimeout(poll, 3000);
         } else {
-          toast.info("Payment still processing", {
-            description: "Your plan will activate once NexaPay confirms payment.",
+          toast.info("Payment processing", {
+            description:
+              "Bitcoin confirmation can take a few minutes. Your plan activates automatically once BTCPay confirms payment.",
           });
           router.replace("/dashboard");
         }
