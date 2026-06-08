@@ -21,7 +21,7 @@ export async function submitContactForm(formData: FormData) {
   }
 
   const { name, email, message } = parsed.data;
-  const supportEmail = process.env.CONTACT_EMAIL ?? "support@novora.com";
+  const supportEmail = process.env.CONTACT_EMAIL ?? "support@novora-ai.com";
 
   if (!process.env.RESEND_API_KEY) {
     console.info("Contact form submission:", { name, email, message });

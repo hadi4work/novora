@@ -265,7 +265,7 @@ export const de: Messages = {
     upgradeBusiness: "Auf Business upgraden",
     plans: {
       free: { name: "Kostenlos", description: "Perfekt zum Ausprobieren", features: ["3 Generierungen pro Tag", "Basis-KI-Ausgaben", "Alle Social-Media-Plattformen", "Kurze Produktbeschreibungen", "Lebenslauf-Vorschau"] },
-      pro: { name: "Pro", description: "Für Creator und Freelancer", features: ["Unbegrenzte Generierungen", "Fortgeschrittenes KI-Modell", "Alle Plattformen", "Volle Beschreibungen + SEO", "PDF-Export Lebenslauf", "Gespeicherter Verlauf", "Keine Werbung"] },
+      pro: { name: "Pro", description: "Für Creator und Freelancer", features: ["Unbegrenzte Generierungen", "Fortgeschrittenes KI-Modell", "Alle Plattformen", "Volle Beschreibungen + SEO", "PDF- und Word-Export Lebenslauf", "Gespeicherter Verlauf", "Keine Werbung"] },
       business: { name: "Business", description: "Für Teams und Agenturen", features: ["Alles in Pro", "Prioritäts-Generierung", "Premium-Vorlagen", "Team-Funktionen (bald)", "API-Zugang (bald)"] },
     },
     faqs: [

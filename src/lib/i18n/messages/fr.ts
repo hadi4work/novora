@@ -265,7 +265,7 @@ export const fr: Messages = {
     upgradeBusiness: "Passer à Business",
     plans: {
       free: { name: "Gratuit", description: "Parfait pour essayer Novora", features: ["3 générations par jour", "Sorties IA basiques", "Toutes les plateformes sociales", "Descriptions produits courtes", "Aperçu du CV"] },
-      pro: { name: "Pro", description: "Pour créateurs et freelances", features: ["Générations illimitées", "Modèle IA avancé", "Toutes les plateformes", "Descriptions complètes + SEO", "Export PDF CV", "Historique sauvegardé", "Sans publicité"] },
+      pro: { name: "Pro", description: "Pour créateurs et freelances", features: ["Générations illimitées", "Modèle IA avancé", "Toutes les plateformes", "Descriptions complètes + SEO", "Export PDF et Word CV", "Historique sauvegardé", "Sans publicité"] },
       business: { name: "Business", description: "Pour équipes et agences", features: ["Tout dans Pro", "Génération prioritaire", "Modèles premium", "Fonctions équipe (bientôt)", "Accès API (bientôt)"] },
     },
     faqs: [

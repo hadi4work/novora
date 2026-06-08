@@ -39,7 +39,7 @@ export default function TermsPage() {
         AI-generated content.
       </p>
       <h2>Contact</h2>
-      <p>Questions? Email support@novora.com.</p>
+      <p>Questions? Email support@novora-ai.com.</p>
     </div>
   );
 }

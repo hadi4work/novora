@@ -37,10 +37,10 @@ export default function PrivacyPolicyPage() {
       <h2>Your Rights</h2>
       <p>
         You may request access, correction, or deletion of your data by contacting
-        support@novora.com.
+        support@novora-ai.com.
       </p>
       <h2>Contact</h2>
-      <p>Questions? Email support@novora.com.</p>
+      <p>Questions? Email support@novora-ai.com.</p>
     </div>
   );
 }

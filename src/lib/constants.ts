@@ -2,7 +2,11 @@ import type { Plan, SocialPlatform, Tool } from "@/types";
 
 export const APP_NAME = "Novora";
 export const APP_TAGLINE = "Create. Grow. Succeed.";
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+export const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(
+  /\/$/,
+  ""
+);
+export const SUPPORT_EMAIL = process.env.CONTACT_EMAIL ?? "support@novora-ai.com";
 
 export const FREE_DAILY_LIMIT = 3;
 export const MAX_AD_REWARDS_PER_DAY = 3;

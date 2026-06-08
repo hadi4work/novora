@@ -65,8 +65,8 @@ export const en = {
     quickStart: "Quick start",
     socialDesc: "Captions, hashtags, and CTAs for every platform",
     productDesc: "SEO-friendly product copy for your store",
-    resumeDesc: "ATS-friendly resumes with PDF export",
-    upgradeCta: "Unlimited generations, PDF export, and no ads.",
+    resumeDesc: "ATS-friendly resumes with PDF & Word export",
+    upgradeCta: "Unlimited generations, PDF & Word export, and no ads.",
   },
   tools: {
     socialMedia: {
@@ -281,7 +281,7 @@ export const en = {
           "Advanced AI model",
           "All social platforms",
           "Full product descriptions + SEO",
-          "Resume PDF export",
+          "Resume PDF & Word export",
           "Saved history",
           "No ads",
         ],
@@ -341,7 +341,7 @@ export const en = {
       },
       resume: {
         title: "Resume Builder",
-        description: "Professional, ATS-friendly, and modern resume templates with PDF export.",
+        description: "Professional, ATS-friendly, and modern resume templates with PDF & Word export.",
       },
     },
     footer: {

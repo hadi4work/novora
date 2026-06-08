@@ -67,8 +67,8 @@ export const ar: Messages = {
     quickStart: "ابدأ سريعاً",
     socialDesc: "تعليقات وهاشتاغ ودعوات لاتخاذ إجراء لكل المنصات",
     productDesc: "نصوص منتجات محسّنة لمحركات البحث",
-    resumeDesc: "سير ذاتية متوافقة مع ATS مع تصدير PDF",
-    upgradeCta: "توليدات غير محدودة، تصدير PDF، وبدون إعلانات.",
+    resumeDesc: "سير ذاتية متوافقة مع ATS مع تصدير PDF وWord",
+    upgradeCta: "توليدات غير محدودة، تصدير PDF وWord، وبدون إعلانات.",
   },
   tools: {
     socialMedia: {
@@ -283,7 +283,7 @@ export const ar: Messages = {
           "نموذج ذكاء متقدم",
           "كل منصات التواصل",
           "وصف منتجات كامل + SEO",
-          "تصدير السيرة PDF",
+          "تصدير السيرة PDF وWord",
           "حفظ السجل",
           "بدون إعلانات",
         ],
@@ -343,7 +343,7 @@ export const ar: Messages = {
       },
       resume: {
         title: "صانع السيرة الذاتية",
-        description: "قوالب سيرة احترافية ومتوافقة ATS وعصرية مع تصدير PDF.",
+        description: "قوالب سيرة احترافية ومتوافقة ATS وعصرية مع تصدير PDF وWord.",
       },
     },
     footer: {

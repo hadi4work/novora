@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getAuthCallbackUrl } from "@/lib/auth/app-url";
 import { createClient } from "@/lib/auth/supabase-server";
 import { logAuditEvent } from "@/lib/audit/audit-service";
 
@@ -31,7 +32,7 @@ export async function signUpWithEmail(formData: FormData) {
     password,
     options: {
       data: { full_name: fullName },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+      emailRedirectTo: getAuthCallbackUrl("/dashboard"),
     },
   });
 
@@ -47,7 +48,7 @@ export async function getGoogleAuthUrl(redirectTo?: string) {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?redirect=${redirectTo ?? "/dashboard"}`,
+      redirectTo: getAuthCallbackUrl(redirectTo ?? "/dashboard"),
     },
   });
 
@@ -60,11 +61,9 @@ export async function getGoogleAuthUrl(redirectTo?: string) {
 
 export async function requestPasswordReset(formData: FormData) {
   const email = formData.get("email") as string;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-
   const supabase = await createClient();
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${appUrl}/auth/callback?redirect=/settings`,
+    redirectTo: getAuthCallbackUrl("/settings"),
   });
 
   if (error) return { error: error.message };
