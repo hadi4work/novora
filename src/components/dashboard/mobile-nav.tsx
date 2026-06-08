@@ -18,8 +18,9 @@ import type { Plan } from "@/types";
 
 export function MobileNav({ plan }: { plan: Plan }) {
   const pathname = usePathname();
-  const { t } = useTranslations("nav");
+  const { t, dir } = useTranslations("nav");
   const { t: tc } = useTranslations("common");
+  const sheetSide = dir === "rtl" ? "right" : "left";
 
   return (
     <Sheet>
@@ -29,7 +30,7 @@ export function MobileNav({ plan }: { plan: Plan }) {
       >
         <Menu className="h-5 w-5" />
       </SheetTrigger>
-      <SheetContent side="left" className="flex w-64 flex-col">
+      <SheetContent side={sheetSide} className="flex w-64 flex-col">
         <Logo href="/dashboard" size="sm" className="mb-6" />
         <nav className="flex-1 space-y-1 overflow-y-auto">
           {dashboardNavItems.map((item) => (
