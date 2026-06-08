@@ -25,13 +25,63 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
+function renderInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} className="font-semibold text-foreground">
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      part
+    )
+  );
+}
+
 function renderMarkdown(content: string) {
   return content.split("\n").map((line, i) => {
-    if (line.startsWith("# ")) return <h1 key={i} className="text-3xl font-bold mt-8 mb-4">{line.slice(2)}</h1>;
-    if (line.startsWith("## ")) return <h2 key={i} className="text-2xl font-bold mt-6 mb-3">{line.slice(3)}</h2>;
+    if (line.startsWith("# ")) {
+      return (
+        <h1 key={i} className="text-3xl font-bold mt-8 mb-4">
+          {renderInline(line.slice(2))}
+        </h1>
+      );
+    }
+    if (line.startsWith("## ")) {
+      return (
+        <h2 key={i} className="text-2xl font-bold mt-6 mb-3">
+          {renderInline(line.slice(3))}
+        </h2>
+      );
+    }
+    if (line.startsWith("### ")) {
+      return (
+        <h3 key={i} className="text-xl font-semibold mt-5 mb-2">
+          {renderInline(line.slice(4))}
+        </h3>
+      );
+    }
+    if (line.startsWith("- ")) {
+      return (
+        <li key={i} className="mb-2 ms-5 list-disc leading-relaxed text-muted-foreground">
+          {renderInline(line.slice(2))}
+        </li>
+      );
+    }
+    if (/^\d+\.\s/.test(line)) {
+      return (
+        <li key={i} className="mb-2 ms-5 list-decimal leading-relaxed text-muted-foreground">
+          {renderInline(line.replace(/^\d+\.\s/, ""))}
+        </li>
+      );
+    }
     if (line.startsWith("---")) return <hr key={i} className="my-8" />;
-    if (line.trim() === "") return <br key={i} />;
-    return <p key={i} className="mb-4 leading-relaxed text-muted-foreground">{line}</p>;
+    if (line.trim() === "") return null;
+    return (
+      <p key={i} className="mb-4 leading-relaxed text-muted-foreground">
+        {renderInline(line)}
+      </p>
+    );
   });
 }
 
