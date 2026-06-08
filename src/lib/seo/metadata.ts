@@ -41,7 +41,11 @@ export const defaultMetadata: Metadata = {
     "AI-powered content tools for creators, businesses, and job seekers. Generate social media posts, product descriptions, and professional resumes.",
   metadataBase: new URL(APP_URL),
   icons: {
-    icon: [{ url: "/logo.png", type: "image/png" }],
-    apple: [{ url: "/logo.png", type: "image/png" }],
+    icon: [
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+    shortcut: [{ url: "/icon.png" }],
   },
 };
