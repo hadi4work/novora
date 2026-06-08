@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInWithEmail, getGoogleAuthUrl, signUpWithEmail } from "@/actions/auth";
+import { signInWithEmail, signUpWithEmail } from "@/actions/auth";
+import { startGoogleOAuth } from "@/lib/auth/oauth-client";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
 export function LoginForm({ redirect }: { redirect?: string }) {
@@ -57,9 +58,8 @@ export function LoginForm({ redirect }: { redirect?: string }) {
         disabled={isPending}
         onClick={() =>
           startTransition(async () => {
-            const result = await getGoogleAuthUrl(redirect);
+            const result = await startGoogleOAuth(redirect ?? "/dashboard");
             if (result.error) setError(result.error);
-            else if (result.url) window.location.href = result.url;
           })
         }
       />
@@ -86,6 +86,7 @@ export function SignupForm() {
           startTransition(async () => {
             setError(null);
             setSuccess(null);
+            formData.set("callbackOrigin", window.location.origin);
             const result = await signUpWithEmail(formData);
             if (result?.error) setError(result.error);
             if (result?.success) setSuccess(result.message ?? "Account created!");
@@ -116,9 +117,8 @@ export function SignupForm() {
         disabled={isPending}
         onClick={() =>
           startTransition(async () => {
-            const result = await getGoogleAuthUrl("/dashboard");
+            const result = await startGoogleOAuth("/dashboard");
             if (result.error) setError(result.error);
-            else if (result.url) window.location.href = result.url;
           })
         }
       />

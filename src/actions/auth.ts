@@ -21,6 +21,16 @@ export async function signInWithEmail(formData: FormData) {
   redirect(redirectTo);
 }
 
+function resolveAuthCallbackUrl(formData: FormData, redirectPath = "/dashboard") {
+  const callbackOrigin = formData.get("callbackOrigin") as string | null;
+  if (callbackOrigin) {
+    const origin = callbackOrigin.replace(/\/$/, "");
+    const path = redirectPath.startsWith("/") ? redirectPath : `/${redirectPath}`;
+    return `${origin}/auth/callback?redirect=${encodeURIComponent(path)}`;
+  }
+  return getAuthCallbackUrl(redirectPath);
+}
+
 export async function signUpWithEmail(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -32,7 +42,7 @@ export async function signUpWithEmail(formData: FormData) {
     password,
     options: {
       data: { full_name: fullName },
-      emailRedirectTo: getAuthCallbackUrl("/dashboard"),
+      emailRedirectTo: resolveAuthCallbackUrl(formData, "/dashboard"),
     },
   });
 
@@ -41,22 +51,6 @@ export async function signUpWithEmail(formData: FormData) {
   }
 
   return { success: true, message: "Check your email to confirm your account." };
-}
-
-export async function getGoogleAuthUrl(redirectTo?: string) {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: getAuthCallbackUrl(redirectTo ?? "/dashboard"),
-    },
-  });
-
-  if (error) {
-    return { error: error.message };
-  }
-
-  return { url: data.url };
 }
 
 export async function requestPasswordReset(formData: FormData) {

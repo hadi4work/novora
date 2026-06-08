@@ -18,8 +18,25 @@ async function isOnboardingCompleted(
 }
 
 export async function middleware(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl;
+
+  const authCode = searchParams.get("code");
+  const tokenHash = searchParams.get("token_hash");
+  const authType = searchParams.get("type");
+
+  if (
+    pathname !== "/auth/callback" &&
+    (authCode || (tokenHash && authType))
+  ) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    if (!callbackUrl.searchParams.has("redirect")) {
+      callbackUrl.searchParams.set("redirect", "/dashboard");
+    }
+    return NextResponse.redirect(callbackUrl);
+  }
+
   const { supabaseResponse, user, supabase } = await updateSession(request);
-  const { pathname } = request.nextUrl;
 
   const isProtected = protectedPrefixes.some((prefix) =>
     pathname.startsWith(prefix)
