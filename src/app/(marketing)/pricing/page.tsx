@@ -10,14 +10,19 @@ export const metadata = createMetadata({
   path: "/pricing",
 });
 
-export default async function PricingPage() {
+export default async function PricingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
   const { messages } = await getServerTranslations();
+  const params = await searchParams;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <JsonLd data={faqJsonLd(messages.pricing.faqs)} />
       <Breadcrumbs items={[{ name: "Pricing", href: "/pricing" }]} />
-      <PricingPageContent />
+      <PricingPageContent error={params.error ? decodeURIComponent(params.error) : undefined} />
     </div>
   );
 }

@@ -4,12 +4,17 @@ import { PricingTable } from "@/components/marketing/pricing-table";
 import { FAQ } from "@/components/marketing/faq";
 import { useLocale, useTranslations } from "@/components/providers/locale-provider";
 
-export function PricingPageContent() {
+export function PricingPageContent({ error }: { error?: string }) {
   const { messages } = useLocale();
   const { t } = useTranslations("pricing");
 
   return (
     <>
+      {error && (
+        <div className="mb-8 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-center text-sm text-destructive break-words">
+          {error}
+        </div>
+      )}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight">{t("title")}</h1>
         <p className="mt-4 text-lg text-muted-foreground">{t("subtitle")}</p>

@@ -1,5 +1,4 @@
 import { createHmac, timingSafeEqual } from "crypto";
-import { APP_URL } from "@/lib/constants";
 import { PLAN_PRICES } from "@/lib/constants";
 import {
   encodeBtcpayMetadata,
@@ -54,10 +53,6 @@ export class BtcpayProvider implements PaymentProvider {
     return id;
   }
 
-  private get webhookUrl() {
-    return `${APP_URL}/api/webhooks/btcpay`;
-  }
-
   async createCheckoutSession(params: CheckoutParams): Promise<CheckoutSession> {
     if (!params.paymentRef) {
       throw new Error("paymentRef is required for BTCPay checkout");
@@ -76,20 +71,21 @@ export class BtcpayProvider implements PaymentProvider {
         body: JSON.stringify({
           amount: amount.toFixed(2),
           currency: "USD",
-          metadata: encodeBtcpayMetadata({
-            orderId: params.paymentRef,
-            userId: params.userId,
-            plan: params.plan,
-            email: params.email,
-          }),
+          metadata: {
+            ...encodeBtcpayMetadata({
+              orderId: params.paymentRef,
+              userId: params.userId,
+              plan: params.plan,
+              email: params.email,
+            }),
+            itemDesc: PLAN_LABELS[params.plan],
+          },
           checkout: {
             redirectURL: params.successUrl,
             redirectAutomatically: true,
             speedPolicy: "MediumSpeed",
           },
-          notificationURL: this.webhookUrl,
           additionalSearchTerms: [params.paymentRef],
-          itemDesc: PLAN_LABELS[params.plan],
         }),
       }
     );
