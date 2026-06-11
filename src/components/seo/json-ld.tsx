@@ -7,6 +7,23 @@ export function JsonLd({ data }: { data: Record<string, unknown> | Record<string
   );
 }
 
+export function websiteJsonLd() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Novora",
+    url: baseUrl,
+    description:
+      "AI-powered content tools for creators, businesses, and job seekers.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${baseUrl}/blog?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",

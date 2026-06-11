@@ -40,6 +40,9 @@ export const defaultMetadata: Metadata = {
   description:
     "AI-powered content tools for creators, businesses, and job seekers. Generate social media posts, product descriptions, and professional resumes.",
   metadataBase: new URL(APP_URL),
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
   icons: {
     icon: [
       { url: "/icon.png", type: "image/png", sizes: "32x32" },

@@ -5,7 +5,7 @@ import { LocaleProvider } from "@/components/providers/locale-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@/components/analytics/google-analytics";
-import { JsonLd, organizationJsonLd } from "@/components/seo/json-ld";
+import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/json-ld";
 import { getServerLocale } from "@/lib/i18n/server";
 import { isRtlLocale } from "@/lib/i18n/config";
 import { defaultMetadata } from "@/lib/seo/metadata";
@@ -88,7 +88,7 @@ export default async function RootLayout({
         ) : null}
       </head>
       <body className={`${delight.className} min-h-full flex flex-col antialiased`}>
-        <JsonLd data={organizationJsonLd()} />
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <LocaleProvider locale={locale}>
           <ThemeProvider>
             {children}
