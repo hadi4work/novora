@@ -24,6 +24,16 @@ export default function PrivacyPolicyPage() {
         Your data is used to provide AI generation services, manage your account, process payments,
         and improve our platform. We do not sell your personal data.
       </p>
+      <h2>Advertising</h2>
+      <p>
+        Free-plan users may see ads served by Google AdSense. Google and its partners may use
+        cookies to serve ads based on your visits to this site and other sites on the Internet.
+        You can opt out of personalized advertising by visiting{" "}
+        <a href="https://www.google.com/settings/ads" rel="noopener noreferrer" target="_blank">
+          Google Ads Settings
+        </a>
+        .
+      </p>
       <h2>AI Processing</h2>
       <p>
         Content you submit for generation is sent to our AI provider (xAI Grok) with server-side

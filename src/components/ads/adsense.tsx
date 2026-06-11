@@ -5,19 +5,6 @@ import Script from "next/script";
 const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 const rewardedSlot = process.env.NEXT_PUBLIC_ADSENSE_REWARDED_SLOT;
 
-export function AdSenseScript() {
-  if (!clientId) return null;
-
-  return (
-    <Script
-      async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
-      crossOrigin="anonymous"
-      strategy="afterInteractive"
-    />
-  );
-}
-
 export function AdUnit({
   slot,
   format = "auto",

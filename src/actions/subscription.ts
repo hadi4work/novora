@@ -25,8 +25,11 @@ function checkoutErrorMessage(error: unknown): string {
     if (message.includes("BTCPAY_STORE_ID is not configured")) {
       return "Payment is not configured. Set BTCPAY_STORE_ID on the server.";
     }
+    if (message.includes("Full node not available")) {
+      return "Bitcoin payments are temporarily unavailable while the BTCPay node finishes syncing. Please try again in a few hours, or check BTCPay Server for sync progress.";
+    }
     if (message.includes("BTCPay API error")) {
-      return message;
+      return "Payment server error. Please try again shortly or contact support if this continues.";
     }
     if (message.includes("Failed to create pending payment")) {
       return message;
