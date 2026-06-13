@@ -4,12 +4,21 @@ export const HILLTOPADS_SITE_VERIFICATION = {
   fileName: "dc6c0320ccffdc85735e.txt",
 } as const;
 
-/** Paste HilltopAds Video zone JS snippet fields after creating the zone. */
+/** HilltopAds Video zone — reward dialog (watch ad for +1 generation). */
 export const HILLTOPADS_VIDEO = {
   scriptSrc: "",
-  inlineScript: "",
+  inlineScript: `(function(tjen){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = tjen || {};
+s.src = "\\/\\/quarrelsomebitter.com\\/bnX.Vvstd\\/GPld0xY\\/WbcH\\/_eZms9su-ZiULlXkTPWT\\/cqxDMazcUfxrNlzWMBt\\/NszDEAz\\/NHTYER3TNjwz";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})`,
   containerId: "hilltopads-video-reward",
-} as const;
+};
 
 export function isHilltopAdsVideoConfigured() {
   return Boolean(HILLTOPADS_VIDEO.scriptSrc || HILLTOPADS_VIDEO.inlineScript);
