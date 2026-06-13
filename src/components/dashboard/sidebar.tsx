@@ -22,7 +22,7 @@ export function Sidebar({ plan, isAdmin = false }: { plan: Plan; isAdmin?: boole
   return (
     <aside className="dashboard-sidebar relative hidden w-64 shrink-0 border-r bg-muted/20 lg:flex lg:flex-col lg:min-h-screen">
       <div className="flex h-16 items-center gap-2 border-b px-6">
-        <Logo href="/dashboard" size="sm" />
+        <Logo href="/" size="sm" />
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {dashboardNavItems.map((item) => (

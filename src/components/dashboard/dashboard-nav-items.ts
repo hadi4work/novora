@@ -1,4 +1,5 @@
 import {
+  BookOpen,
   FileText,
   History,
   LayoutDashboard,
@@ -14,6 +15,7 @@ export type DashboardNavKey =
   | "productDescriptions"
   | "resumeBuilder"
   | "history"
+  | "blog"
   | "settings";
 
 export const dashboardNavItems: {
@@ -26,6 +28,7 @@ export const dashboardNavItems: {
   { href: "/app/product-description", key: "productDescriptions", icon: ShoppingBag },
   { href: "/app/resume", key: "resumeBuilder", icon: FileText },
   { href: "/history", key: "history", icon: History },
+  { href: "/blog", key: "blog", icon: BookOpen },
   { href: "/settings", key: "settings", icon: Settings },
 ];
 
