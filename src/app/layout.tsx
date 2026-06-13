@@ -79,6 +79,9 @@ export default async function RootLayout({
       className={`${delight.variable} ${notoArabic.variable} h-full`}
     >
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="48x48" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
         <meta
           name={HILLTOPADS_SITE_VERIFICATION.metaName}
           content={HILLTOPADS_SITE_VERIFICATION.metaContent}
