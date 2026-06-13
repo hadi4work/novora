@@ -8,6 +8,7 @@ import { Analytics } from "@/components/analytics/google-analytics";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/json-ld";
 import { getServerLocale } from "@/lib/i18n/server";
 import { isRtlLocale } from "@/lib/i18n/config";
+import { HILLTOPADS_SITE_VERIFICATION } from "@/lib/ads/hilltopads-config";
 import { defaultMetadata } from "@/lib/seo/metadata";
 import "./globals.css";
 
@@ -77,6 +78,12 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${delight.variable} ${notoArabic.variable} h-full`}
     >
+      <head>
+        <meta
+          name={HILLTOPADS_SITE_VERIFICATION.metaName}
+          content={HILLTOPADS_SITE_VERIFICATION.metaContent}
+        />
+      </head>
       <body className={`${delight.className} min-h-full flex flex-col antialiased`}>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <LocaleProvider locale={locale}>

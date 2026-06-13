@@ -3,7 +3,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import {
   ADSTERRA_KEYS,
-  ADSTERRA_REWARD,
   ADSTERRA_SIZES,
 } from "@/lib/ads/adsterra-config";
 
@@ -113,33 +112,6 @@ export function AdsterraRectangle({ className }: { className?: string }) {
       width={width}
       height={height}
       className={className}
-    />
-  );
-}
-
-export function AdsterraRewardAd({ className }: { className?: string }) {
-  const loadedRef = useRef(false);
-
-  useEffect(() => {
-    if (loadedRef.current) return;
-    loadedRef.current = true;
-
-    const script = document.createElement("script");
-    script.async = true;
-    script.setAttribute("data-cfasync", "false");
-    script.src = ADSTERRA_REWARD.scriptSrc;
-    document.body.appendChild(script);
-
-    return () => {
-      script.remove();
-      loadedRef.current = false;
-    };
-  }, []);
-
-  return (
-    <div
-      id={ADSTERRA_REWARD.containerId}
-      className={`min-h-[250px] w-full overflow-hidden rounded-lg ${className ?? ""}`}
     />
   );
 }
