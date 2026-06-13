@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FAQ } from "@/components/marketing/faq";
 import { JsonLd, faqJsonLd, webApplicationJsonLd } from "@/components/seo/json-ld";
-import { AdUnit } from "@/components/ads/adsense";
+import { AdsterraLeaderboard } from "@/components/ads/adsterra";
 import { APP_URL } from "@/lib/constants";
 
 interface ToolLandingProps {
@@ -68,7 +68,7 @@ export function ToolLanding({
         </div>
       </div>
 
-      <AdUnit slot="tool-landing" format="horizontal" className="mt-16" />
+      <AdsterraLeaderboard className="mt-16" />
 
       <section className="mt-20">
         <h2 className="text-2xl font-bold mb-6">Frequently asked questions</h2>

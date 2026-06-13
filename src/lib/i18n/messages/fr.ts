@@ -313,7 +313,7 @@ export const fr: Messages = {
     rewardGranted: "+1 génération débloquée !",
     rewardGrantedDesc: "Vous pouvez générer à nouveau.",
     adPlaceholder: "Emplacement publicité vidéo",
-    adPlaceholderDesc: "Configurez NEXT_PUBLIC_ADSENSE_CLIENT_ID",
+    adPlaceholderDesc: "La publicité s'affiche lors du visionnage pour des générations supplémentaires",
   },
   onboarding: {
     title: "Bienvenue sur Novora",

@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { JsonLd, articleJsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AdUnit } from "@/components/ads/adsense";
+import { AdsterraRectangle } from "@/components/ads/adsterra";
 import { getPostBySlug, getPublishedPosts } from "@/lib/blog/posts";
 import { createMetadata } from "@/lib/seo/metadata";
 
@@ -111,7 +111,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <div className="mt-8">{renderMarkdown(post.content)}</div>
 
-      <AdUnit slot="blog-in-article" format="rectangle" className="my-8" />
+      <AdsterraRectangle className="my-8" />
 
       <div className="mt-12 rounded-lg border bg-muted/30 p-6 text-center">
         <h3 className="font-semibold text-lg">Try Novora free</h3>

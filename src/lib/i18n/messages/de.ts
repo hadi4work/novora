@@ -313,7 +313,7 @@ export const de: Messages = {
     rewardGranted: "+1 Generierung freigeschaltet!",
     rewardGrantedDesc: "Sie können wieder generieren.",
     adPlaceholder: "Video-Werbeplatz",
-    adPlaceholderDesc: "NEXT_PUBLIC_ADSENSE_CLIENT_ID konfigurieren",
+    adPlaceholderDesc: "Werbung erscheint beim Ansehen für zusätzliche Generierungen",
   },
   onboarding: {
     title: "Willkommen bei Novora",

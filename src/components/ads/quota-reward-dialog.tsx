@@ -5,7 +5,7 @@ import { Loader2, Play, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { claimAdReward } from "@/actions/ad-reward";
-import { RewardedVideoAd } from "@/components/ads/adsense";
+import { AdsterraRewardAd } from "@/components/ads/adsterra";
 import { useTranslations } from "@/components/providers/locale-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -122,7 +122,7 @@ export function QuotaRewardDialog({
               <DialogTitle>{t("watchTitle")}</DialogTitle>
               <DialogDescription>{t("watchDesc")}</DialogDescription>
             </DialogHeader>
-            <RewardedVideoAd />
+            <AdsterraRewardAd />
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">{t("timeRemaining")}</span>

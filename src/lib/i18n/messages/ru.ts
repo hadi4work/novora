@@ -313,7 +313,7 @@ export const ru: Messages = {
     rewardGranted: "+1 генерация разблокирована!",
     rewardGrantedDesc: "Можно генерировать снова.",
     adPlaceholder: "Место для видеорекламы",
-    adPlaceholderDesc: "Настройте NEXT_PUBLIC_ADSENSE_CLIENT_ID",
+    adPlaceholderDesc: "Реклама показывается при просмотре для дополнительных генераций",
   },
   onboarding: {
     title: "Добро пожаловать в Novora",

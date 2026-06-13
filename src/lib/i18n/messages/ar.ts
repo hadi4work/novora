@@ -375,7 +375,7 @@ export const ar: Messages = {
     rewardGranted: "+1 توليد مفعّل!",
     rewardGrantedDesc: "يمكنك التوليد مرة أخرى الآن.",
     adPlaceholder: "مكان إعلان الفيديو",
-    adPlaceholderDesc: "اضبط NEXT_PUBLIC_ADSENSE_CLIENT_ID لعرض إعلانات Google",
+    adPlaceholderDesc: "يظهر الإعلان عند مشاهدة إعلان للحصول على توليدات إضافية",
   },
   onboarding: {
     title: "مرحباً بك في Novora",

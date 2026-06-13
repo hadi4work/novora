@@ -69,7 +69,6 @@ export default async function RootLayout({
 }>) {
   const locale = await getServerLocale();
   const dir = isRtlLocale(locale) ? "rtl" : "ltr";
-  const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
   return (
     <html
@@ -78,15 +77,6 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${delight.variable} ${notoArabic.variable} h-full`}
     >
-      <head>
-        {adsenseClientId ? (
-          <script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
-            crossOrigin="anonymous"
-          />
-        ) : null}
-      </head>
       <body className={`${delight.className} min-h-full flex flex-col antialiased`}>
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <LocaleProvider locale={locale}>

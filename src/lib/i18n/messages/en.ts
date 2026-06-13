@@ -373,7 +373,7 @@ export const en = {
     rewardGranted: "+1 generation unlocked!",
     rewardGrantedDesc: "You can generate again now.",
     adPlaceholder: "Video ad placement",
-    adPlaceholderDesc: "Set NEXT_PUBLIC_ADSENSE_CLIENT_ID to show Google video ads",
+    adPlaceholderDesc: "Ad placement loads when you watch an ad for extra generations",
   },
   onboarding: {
     title: "Welcome to Novora",

@@ -75,12 +75,7 @@ AI generation outputs in the **same language as your input** (e.g. Arabic inputs
 
 ### Ad rewards (free plan)
 
-When free users hit the 3 daily generations, they can watch a short Google ad for +1 extra generation (up to 3 ad rewards per day). Apply migration `004_ad_reward_bonus.sql` and set:
-
-```env
-NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-xxxxxxxxxx
-NEXT_PUBLIC_ADSENSE_REWARDED_SLOT=your-video-ad-unit-id
-```
+When free users hit the 3 daily generations, they can watch a short ad for +1 extra generation (up to 3 ad rewards per day). Apply migration `004_ad_reward_bonus.sql`. Ad units are configured in `src/lib/ads/adsterra-config.ts`.
 
 ### BTCPay Server setup (production)
 

@@ -5,7 +5,7 @@ import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { LanguageSwitcher } from "@/components/locale/language-switcher";
 import { ThemeToggle } from "@/components/providers/theme-toggle";
 import { UpgradeHandler } from "@/components/dashboard/upgrade-handler";
-import { AdUnit } from "@/components/ads/adsense";
+import { AdsterraLeaderboard } from "@/components/ads/adsterra";
 import { createClient } from "@/lib/auth/supabase-server";
 import { getEntitlements } from "@/lib/auth/entitlements";
 import type { Profile } from "@/types";
@@ -63,7 +63,7 @@ export default async function DashboardLayout({
         <main className="flex-1 p-4 lg:p-6">{children}</main>
         {entitlements.showAds && (
           <div className="border-t px-4 py-2">
-            <AdUnit slot="dashboard-banner" format="horizontal" />
+            <AdsterraLeaderboard />
           </div>
         )}
       </div>
