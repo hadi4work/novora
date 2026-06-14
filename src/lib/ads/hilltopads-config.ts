@@ -11,6 +11,17 @@ export const HILLTOPADS_VIDEO = {
   containerId: "hilltopads-video-reward",
 } as const;
 
+/** HilltopAds display banner — blog articles. */
+export const HILLTOPADS_BANNER = {
+  scriptSrc:
+    "https://quarrelsomebitter.com/baXyVMsYd.GClm0LYlWKcw/NeDmU9/uaZZUElHk/PTTucrxXMXzkcEygMwT_MvtMNPz-E/z/NkzQIAxQNpwD",
+  containerId: "hilltopads-banner",
+} as const;
+
 export function isHilltopAdsVideoConfigured() {
   return Boolean(HILLTOPADS_VIDEO.vastTagUrl);
+}
+
+export function isHilltopAdsBannerConfigured() {
+  return Boolean(HILLTOPADS_BANNER.scriptSrc);
 }

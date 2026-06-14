@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AdsterraRectangle } from "@/components/ads/adsterra";
 import { AAdsBlogUnit } from "@/components/ads/aads";
+import { HilltopAdsBanner } from "@/components/ads/hilltopads";
 import { getPostBySlug, getPublishedPosts } from "@/lib/blog/posts";
 import { createMetadata } from "@/lib/seo/metadata";
 
@@ -141,6 +142,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </div>
 
       <AdsterraRectangle className="my-8" />
+      <HilltopAdsBanner className="my-8" />
 
       <div className="mt-12 rounded-lg border bg-muted/30 p-6 text-center">
         <h3 className="font-semibold text-lg">Try Novora free</h3>

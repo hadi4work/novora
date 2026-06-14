@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "@/components/providers/locale-provider";
 import {
+  HILLTOPADS_BANNER,
   HILLTOPADS_VIDEO,
+  isHilltopAdsBannerConfigured,
   isHilltopAdsVideoConfigured,
 } from "@/lib/ads/hilltopads-config";
 import {
@@ -16,6 +18,44 @@ import {
 import { AD_WATCH_SECONDS } from "@/lib/constants";
 
 type LoadState = "loading" | "ready" | "playing" | "paused" | "unavailable";
+
+export function HilltopAdsBanner({ className }: { className?: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const loadedRef = useRef(false);
+
+  useEffect(() => {
+    if (!isHilltopAdsBannerConfigured() || loadedRef.current) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    loadedRef.current = true;
+    container.innerHTML = "";
+
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.async = true;
+    script.referrerPolicy = "no-referrer-when-downgrade";
+    script.src = HILLTOPADS_BANNER.scriptSrc;
+    container.appendChild(script);
+
+    return () => {
+      container.innerHTML = "";
+      loadedRef.current = false;
+    };
+  }, []);
+
+  if (!isHilltopAdsBannerConfigured()) return null;
+
+  return (
+    <div
+      id={HILLTOPADS_BANNER.containerId}
+      ref={containerRef}
+      className={`flex min-h-[90px] w-full justify-center overflow-hidden ${className ?? ""}`}
+      aria-label="Advertisement"
+    />
+  );
+}
 
 type HilltopAdsVideoAdProps = {
   className?: string;
