@@ -26,7 +26,8 @@ export function SavedResultCard({
   const showExpandToggle =
     item.tool === "resume" ||
     item.tool === "product_description" ||
-    item.tool === "social_media";
+    item.tool === "social_media" ||
+    item.tool === "video_ad_script";
 
   return (
     <Card>

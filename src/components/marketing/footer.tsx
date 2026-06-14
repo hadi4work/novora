@@ -12,6 +12,7 @@ export function Footer() {
     product: [
       { href: "/social-media-generator", label: t("socialMedia") },
       { href: "/product-description-generator", label: t("productDescriptions") },
+      { href: "/video-ad-script-generator", label: t("videoAdScript") },
       { href: "/resume-builder", label: t("resumeBuilder") },
       { href: "/pricing", label: t("pricing") },
     ],

@@ -27,7 +27,12 @@ export function getEntitlements(
     showAds: limits.showAds,
     model: limits.model,
     allowedPlatforms: limits.allowedPlatforms,
+    socialMediaTones: limits.socialMediaTones,
+    productTones: limits.productTones,
     productDescriptionFormats: limits.productDescriptionFormats,
+    videoAdTones: limits.videoAdTones,
+    videoAdDurations: limits.videoAdDurations,
+    canImportProductUrl: limits.canImportProductUrl,
   };
 }
 

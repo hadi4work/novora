@@ -65,5 +65,21 @@ export function HistoryOutputPreview({
     );
   }
 
+  if (tool === "video_ad_script" && output.hook) {
+    const script = output.script as { text: string; startSeconds: number; endSeconds: number }[] | undefined;
+    return (
+      <div className={`space-y-2 text-sm ${expanded ? "" : "line-clamp-3"}`}>
+        <p>
+          <span className="font-medium">{t("hookLabel")}:</span> {output.hook as string}
+        </p>
+        {expanded && script?.map((line, i) => (
+          <p key={i}>
+            <span className="font-medium">{line.startSeconds}s–{line.endSeconds}s:</span> {line.text}
+          </p>
+        ))}
+      </div>
+    );
+  }
+
   return <p className="text-sm text-muted-foreground">{t("generatedContent")}</p>;
 }

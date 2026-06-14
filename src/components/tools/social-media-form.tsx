@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,14 +27,16 @@ import {
   type SocialMediaOutput,
 } from "@/lib/validations/social-media";
 import { useTranslations } from "@/components/providers/locale-provider";
-import { SOCIAL_PLATFORMS } from "@/lib/constants";
-import type { SocialPlatform } from "@/types";
+import { SOCIAL_MEDIA_TONES, SOCIAL_PLATFORMS } from "@/lib/constants";
+import type { SocialMediaTone, SocialPlatform } from "@/types";
 
 export function SocialMediaForm({
   allowedPlatforms,
+  allowedTones,
   canSave,
 }: {
   allowedPlatforms: SocialPlatform[] | "all";
+  allowedTones: SocialMediaTone[];
   canSave: boolean;
 }) {
   const [output, setOutput] = useState<SocialMediaOutput | null>(null);
@@ -67,12 +70,14 @@ export function SocialMediaForm({
   const platform = watch("platform");
   const tone = watch("tone") ?? "professional";
 
-  const toneLabels: Record<NonNullable<SocialMediaInput["tone"]>, string> = {
-    professional: t("toneProfessional"),
-    casual: t("toneCasual"),
-    playful: t("tonePlayful"),
-    inspirational: t("toneInspirational"),
-  };
+  const toneOptions: { value: SocialMediaTone; label: string }[] = [
+    { value: "professional", label: t("toneProfessional") },
+    { value: "casual", label: t("toneCasual") },
+    { value: "playful", label: t("tonePlayful") },
+    { value: "inspirational", label: t("toneInspirational") },
+  ];
+
+  const hasLockedTones = allowedTones.length < SOCIAL_MEDIA_TONES.length;
 
   function onSubmit(data: SocialMediaInput) {
     startTransition(async () => {
@@ -149,14 +154,29 @@ export function SocialMediaForm({
               value={tone}
               onValueChange={(v) => setValue("tone", v as SocialMediaInput["tone"])}
             >
-              <SelectTrigger>{toneLabels[tone]}</SelectTrigger>
+              <SelectTrigger>
+                {toneOptions.find((option) => option.value === tone)?.label ?? tone}
+              </SelectTrigger>
               <SelectContent>
-                <SelectItem value="professional">{t("toneProfessional")}</SelectItem>
-                <SelectItem value="casual">{t("toneCasual")}</SelectItem>
-                <SelectItem value="playful">{t("tonePlayful")}</SelectItem>
-                <SelectItem value="inspirational">{t("toneInspirational")}</SelectItem>
+                {toneOptions.map((option) => {
+                  const locked = !allowedTones.includes(option.value);
+                  return (
+                    <SelectItem key={option.value} value={option.value} disabled={locked}>
+                      {option.label}
+                      {locked ? ` (${t("proOnly")})` : ""}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
+            {hasLockedTones && (
+              <p className="text-xs text-muted-foreground">
+                <Link href="/pricing" className="text-primary underline">
+                  {tc("upgrade")} Pro
+                </Link>{" "}
+                — {t("upgradeTones")}
+              </p>
+            )}
           </div>
         </div>
         <Button type="submit" disabled={isPending} className="w-full gap-2">

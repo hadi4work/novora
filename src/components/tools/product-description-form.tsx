@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Sparkles } from "lucide-react";
@@ -28,12 +28,18 @@ import {
   type ProductDescriptionInput,
   type ProductDescriptionOutput,
 } from "@/lib/validations/product-description";
+import { clearProductPrefill, loadProductPrefill } from "@/lib/tools/product-prefill";
+
+import { PRODUCT_TONES } from "@/lib/constants";
+import type { ProductTone } from "@/types";
 
 export function ProductDescriptionForm({
   allowedFormats,
+  allowedTones,
   canSave,
 }: {
   allowedFormats: ("short" | "long" | "seo")[];
+  allowedTones: ProductTone[];
   canSave: boolean;
 }) {
   const [output, setOutput] = useState<ProductDescriptionOutput | null>(null);
@@ -58,12 +64,24 @@ export function ProductDescriptionForm({
   });
 
   const tone = watch("tone") ?? "professional";
-  const toneLabels: Record<NonNullable<ProductDescriptionInput["tone"]>, string> = {
-    professional: t("toneProfessional"),
-    friendly: t("toneFriendly"),
-    luxury: t("toneLuxury"),
-    playful: t("tonePlayful"),
-  };
+
+  useEffect(() => {
+    const prefill = loadProductPrefill();
+    if (!prefill) return;
+    setValue("productName", prefill.productName);
+    setValue("features", prefill.features);
+    setValue("targetAudience", prefill.targetAudience);
+    clearProductPrefill();
+    toast.success(t("prefillApplied"));
+  }, [setValue, t]);
+  const toneOptions: { value: ProductTone; label: string }[] = [
+    { value: "professional", label: t("toneProfessional") },
+    { value: "friendly", label: t("toneFriendly") },
+    { value: "luxury", label: t("toneLuxury") },
+    { value: "playful", label: t("tonePlayful") },
+  ];
+
+  const hasLockedTones = allowedTones.length < PRODUCT_TONES.length;
 
   function toggleFormat(format: string) {
     const updated = selectedFormats.includes(format)
@@ -154,14 +172,29 @@ export function ProductDescriptionForm({
               value={tone}
               onValueChange={(v) => setValue("tone", v as ProductDescriptionInput["tone"])}
             >
-              <SelectTrigger>{toneLabels[tone]}</SelectTrigger>
+              <SelectTrigger>
+                {toneOptions.find((option) => option.value === tone)?.label ?? tone}
+              </SelectTrigger>
               <SelectContent>
-                <SelectItem value="professional">{t("toneProfessional")}</SelectItem>
-                <SelectItem value="friendly">{t("toneFriendly")}</SelectItem>
-                <SelectItem value="luxury">{t("toneLuxury")}</SelectItem>
-                <SelectItem value="playful">{t("tonePlayful")}</SelectItem>
+                {toneOptions.map((option) => {
+                  const locked = !allowedTones.includes(option.value);
+                  return (
+                    <SelectItem key={option.value} value={option.value} disabled={locked}>
+                      {option.label}
+                      {locked ? ` (${t("proOnly")})` : ""}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
+            {hasLockedTones && (
+              <p className="text-xs text-muted-foreground">
+                <Link href="/pricing" className="text-primary underline">
+                  {tc("upgrade")} Pro
+                </Link>{" "}
+                — {t("upgradeTones")}
+              </p>
+            )}
           </div>
           <div className="space-y-2">
             <Label>{t("formats")}</Label>

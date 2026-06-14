@@ -2,6 +2,7 @@ import { AIClientError, generateWithAI, parseJsonFromResponse } from "@/lib/ai/a
 import { buildProductDescriptionPrompt } from "@/lib/ai/prompts/product-description/system";
 import { buildResumePrompt } from "@/lib/ai/prompts/resume/system";
 import { buildSocialMediaPrompt } from "@/lib/ai/prompts/social-media/system";
+import { buildVideoAdScriptPrompt } from "@/lib/ai/prompts/video-ad-script/system";
 import { getEntitlements } from "@/lib/auth/entitlements";
 import { createClient } from "@/lib/auth/supabase-server";
 import { logAuditEvent } from "@/lib/audit/audit-service";
@@ -28,6 +29,11 @@ import {
   socialMediaSchema,
   type SocialMediaOutput,
 } from "@/lib/validations/social-media";
+import {
+  videoAdScriptOutputSchema,
+  videoAdScriptSchema,
+  type VideoAdScriptOutput,
+} from "@/lib/validations/video-ad-script";
 import type { Entitlements, Profile, Tool } from "@/types";
 
 export type GenerationResult<T> = {
@@ -227,6 +233,15 @@ export async function generateSocialMedia(
     };
   }
 
+  const requestedTone = parsed.data.tone ?? "professional";
+  if (!entitlements.socialMediaTones.includes(requestedTone)) {
+    return {
+      success: false,
+      error: "Upgrade to Pro to use all tone options.",
+      code: "quota_exceeded",
+    };
+  }
+
   const prompt = buildSocialMediaPrompt(parsed.data, entitlements.maxVariations);
 
   return runGeneration({
@@ -286,6 +301,15 @@ export async function generateProductDescription(
     };
   }
 
+  const requestedTone = parsed.data.tone ?? "professional";
+  if (!entitlements.productTones.includes(requestedTone)) {
+    return {
+      success: false,
+      error: "Upgrade to Pro to use all tone options.",
+      code: "quota_exceeded",
+    };
+  }
+
   const prompt = buildProductDescriptionPrompt(parsed.data);
 
   return runGeneration({
@@ -303,6 +327,82 @@ export async function generateProductDescription(
     parse: (content) => parseJsonFromResponse<ProductDescriptionOutput>(content),
     validate: (output) => {
       const result = productDescriptionOutputSchema.safeParse(output);
+      return result.success
+        ? { success: true, data: result.data }
+        : { success: false };
+    },
+  });
+}
+
+export async function generateVideoAdScript(
+  rawInput: unknown
+): Promise<GenerationResult<VideoAdScriptOutput>> {
+  const auth = await requireAuth();
+  if (!auth) {
+    return {
+      success: false,
+      error: "Please sign in to generate content.",
+      code: "unauthorized",
+    };
+  }
+
+  const parsed = videoAdScriptSchema.safeParse(rawInput);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0].message,
+      code: "validation_error",
+    };
+  }
+
+  const entitlements = getEntitlements(auth.profile);
+  const requestedTone = parsed.data.tone ?? "energetic";
+
+  if (!entitlements.videoAdTones.includes(requestedTone)) {
+    return {
+      success: false,
+      error: "Upgrade to Pro to use all tone options.",
+      code: "quota_exceeded",
+    };
+  }
+
+  if (!entitlements.videoAdDurations.includes(parsed.data.durationSeconds)) {
+    return {
+      success: false,
+      error: "Upgrade to Pro for 60s and 90s video scripts.",
+      code: "quota_exceeded",
+    };
+  }
+
+  if (parsed.data.sourceUrl && !entitlements.canImportProductUrl) {
+    return {
+      success: false,
+      error: "Upgrade to Pro to generate scripts from product URLs.",
+      code: "quota_exceeded",
+    };
+  }
+
+  const alternativeHooks =
+    entitlements.plan === "free" ? 0 : Math.min(2, entitlements.maxVariations - 1);
+
+  const prompt = buildVideoAdScriptPrompt(parsed.data, alternativeHooks);
+
+  return runGeneration({
+    userId: auth.userId,
+    tool: "video_ad_script",
+    entitlements,
+    input: parsed.data,
+    auditMetadata: { platform: parsed.data.platform },
+    generate: () =>
+      generateWithAI({
+        system: prompt.system,
+        user: prompt.user,
+        model: entitlements.model,
+        tool: "video_ad_script",
+      }),
+    parse: (content) => parseJsonFromResponse<VideoAdScriptOutput>(content),
+    validate: (output) => {
+      const result = videoAdScriptOutputSchema.safeParse(output);
       return result.success
         ? { success: true, data: result.data }
         : { success: false };

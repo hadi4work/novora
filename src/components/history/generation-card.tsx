@@ -40,7 +40,8 @@ export function GenerationCard({
     generation.status === "completed" &&
     (generation.tool === "resume" ||
       generation.tool === "product_description" ||
-      generation.tool === "social_media");
+      generation.tool === "social_media" ||
+      generation.tool === "video_ad_script");
 
   return (
     <Card>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Share2, ShoppingBag, FileText, ArrowRight } from "lucide-react";
+import { Share2, ShoppingBag, Clapperboard, FileText, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UsageMeter } from "@/components/dashboard/usage-meter";
@@ -34,6 +34,12 @@ export function DashboardHome({
       description: t("productDesc"),
     },
     {
+      href: "/app/video-ad-script",
+      icon: Clapperboard,
+      title: tn("videoAdScript"),
+      description: t("videoAdDesc"),
+    },
+    {
       href: "/app/resume",
       icon: FileText,
       title: tn("resumeBuilder"),
@@ -56,7 +62,7 @@ export function DashboardHome({
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {tools.map((tool) => (
           <Card key={tool.href} className="hover:border-primary/50 transition-colors">
             <CardHeader>

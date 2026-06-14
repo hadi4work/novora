@@ -131,6 +131,55 @@ function generateMockResponse(options: AIGenerateOptions): AIGenerateResult {
     };
   }
 
+  if (userLower.includes("target duration:")) {
+    return {
+      content: JSON.stringify({
+        suggestedDurationSeconds: 30,
+        hook: "Stop scrolling — this product changes everything.",
+        script: [
+          {
+            startSeconds: 0,
+            endSeconds: 3,
+            text: "Stop scrolling — you need to see this.",
+            visualSuggestion: "Close-up product reveal with bold text overlay",
+          },
+          {
+            startSeconds: 3,
+            endSeconds: 12,
+            text: "Premium quality that actually delivers on its promise.",
+            visualSuggestion: "Product in use, lifestyle shot",
+          },
+          {
+            startSeconds: 12,
+            endSeconds: 22,
+            text: "Thousands of happy customers can't be wrong.",
+            visualSuggestion: "Customer testimonial clips or review screenshots",
+          },
+          {
+            startSeconds: 22,
+            endSeconds: 30,
+            text: "Tap the link and grab yours before it's gone.",
+            visualSuggestion: "Product + price + CTA button animation",
+          },
+        ],
+        cta: "Shop now — link in bio",
+        bRollSuggestions: [
+          "Unboxing sequence",
+          "Before/after comparison",
+          "Hands holding product outdoors",
+        ],
+        musicMood: "Upbeat, modern, energetic",
+        alternativeHooks: [
+          "I almost didn't buy this — huge mistake.",
+          "This is the product everyone keeps asking about.",
+        ],
+      }),
+      tokensUsed: 0,
+      latencyMs: 100,
+      model: options.model,
+    };
+  }
+
   if (userLower.includes("product:")) {
     return {
       content: JSON.stringify({

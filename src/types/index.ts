@@ -1,5 +1,5 @@
 export type Plan = "free" | "pro" | "business";
-export type Tool = "social_media" | "product_description" | "resume";
+export type Tool = "social_media" | "product_description" | "resume" | "video_ad_script";
 export type SubscriptionStatus =
   | "active"
   | "past_due"
@@ -15,6 +15,25 @@ export type SocialPlatform =
   | "tiktok"
   | "linkedin"
   | "x";
+export type SocialMediaTone =
+  | "professional"
+  | "casual"
+  | "playful"
+  | "inspirational";
+export type ProductTone = "professional" | "friendly" | "luxury" | "playful";
+export type VideoAdPlatform =
+  | "tiktok"
+  | "instagram_reels"
+  | "youtube_shorts"
+  | "facebook"
+  | "youtube";
+export type VideoAdTone =
+  | "energetic"
+  | "professional"
+  | "emotional"
+  | "humorous"
+  | "luxury"
+  | "storytelling";
 export type ResumeTemplate =
   | "executive"
   | "modern"
@@ -97,5 +116,10 @@ export interface Entitlements {
   showAds: boolean;
   model: string;
   allowedPlatforms: SocialPlatform[] | "all";
+  socialMediaTones: SocialMediaTone[];
+  productTones: ProductTone[];
   productDescriptionFormats: ("short" | "long" | "seo")[];
+  videoAdTones: VideoAdTone[];
+  videoAdDurations: number[];
+  canImportProductUrl: boolean;
 }

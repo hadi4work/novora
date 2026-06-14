@@ -19,6 +19,7 @@ export default async function SocialMediaAppPage() {
       <ToolPageHeader namespace="tools.socialMedia" />
       <SocialMediaForm
         allowedPlatforms={entitlements.allowedPlatforms}
+        allowedTones={entitlements.socialMediaTones}
         canSave={entitlements.canSaveHistory}
       />
     </div>

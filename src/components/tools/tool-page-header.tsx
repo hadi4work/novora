@@ -5,7 +5,7 @@ import { useTranslations } from "@/components/providers/locale-provider";
 export function ToolPageHeader({
   namespace,
 }: {
-  namespace: "tools.socialMedia" | "tools.product" | "tools.resume";
+  namespace: "tools.socialMedia" | "tools.product" | "tools.resume" | "tools.videoAdScript";
 }) {
   const { t } = useTranslations(namespace);
 

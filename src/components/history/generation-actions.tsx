@@ -46,6 +46,16 @@ function buildSavePayload(generation: Generation, resumeSuffix: string) {
     };
   }
 
+  if (generation.tool === "video_ad_script") {
+    const input = generation.input_data as { productName?: string };
+    return {
+      tool: "video_ad_script" as const,
+      title: `${input.productName ?? "Video ad"} script`,
+      content: output,
+      generationId: generation.id,
+    };
+  }
+
   return null;
 }
 

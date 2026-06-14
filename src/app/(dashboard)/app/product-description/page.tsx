@@ -19,6 +19,7 @@ export default async function ProductDescriptionAppPage() {
       <ToolPageHeader namespace="tools.product" />
       <ProductDescriptionForm
         allowedFormats={entitlements.productDescriptionFormats}
+        allowedTones={entitlements.productTones}
         canSave={entitlements.canSaveHistory}
       />
     </div>

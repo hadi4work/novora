@@ -1,5 +1,6 @@
 import {
   BookOpen,
+  Clapperboard,
   FileText,
   History,
   LayoutDashboard,
@@ -13,6 +14,7 @@ export type DashboardNavKey =
   | "dashboard"
   | "socialMedia"
   | "productDescriptions"
+  | "videoAdScript"
   | "resumeBuilder"
   | "history"
   | "blog"
@@ -26,6 +28,7 @@ export const dashboardNavItems: {
   { href: "/dashboard", key: "dashboard", icon: LayoutDashboard },
   { href: "/app/social-media", key: "socialMedia", icon: Share2 },
   { href: "/app/product-description", key: "productDescriptions", icon: ShoppingBag },
+  { href: "/app/video-ad-script", key: "videoAdScript", icon: Clapperboard },
   { href: "/app/resume", key: "resumeBuilder", icon: FileText },
   { href: "/history", key: "history", icon: History },
   { href: "/blog", key: "blog", icon: BookOpen },

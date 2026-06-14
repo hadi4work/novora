@@ -60,6 +60,7 @@ export async function claimAdReward() {
     revalidatePath("/dashboard");
     revalidatePath("/app/social-media");
     revalidatePath("/app/product-description");
+    revalidatePath("/app/video-ad-script");
     revalidatePath("/app/resume");
   }
 

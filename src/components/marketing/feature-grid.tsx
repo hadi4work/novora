@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, Share2, ShoppingBag } from "lucide-react";
+import { FileText, Share2, ShoppingBag, Clapperboard } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocale, useTranslations } from "@/components/providers/locale-provider";
 
 const featureMeta = [
   { key: "social" as const, icon: Share2, href: "/social-media-generator" },
   { key: "product" as const, icon: ShoppingBag, href: "/product-description-generator" },
+  { key: "video" as const, icon: Clapperboard, href: "/video-ad-script-generator" },
   { key: "resume" as const, icon: FileText, href: "/resume-builder" },
 ];
 
@@ -26,7 +27,7 @@ export function FeatureGrid() {
             {t("featuresSubtitle")}
           </p>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {featureMeta.map((feature) => {
             const data = messages.marketing.tools[feature.key];
             return (

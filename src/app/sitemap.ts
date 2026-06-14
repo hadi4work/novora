@@ -19,6 +19,7 @@ const STATIC_PAGES: {
   { path: "/social-media-generator", changeFrequency: "monthly", priority: 0.9 },
   { path: "/product-description-generator", changeFrequency: "monthly", priority: 0.9 },
   { path: "/resume-builder", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/video-ad-script-generator", changeFrequency: "monthly", priority: 0.9 },
   { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
 ];
 
