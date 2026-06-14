@@ -45,6 +45,7 @@ const TEMPLATE_LABEL_KEYS: Record<
 };
 import {
   resumeSchema,
+  normalizeResumeInput,
   type ResumeInput,
   type ResumeOutput,
 } from "@/lib/validations/resume";
@@ -110,7 +111,7 @@ export function ResumeForm({
     resolver: zodResolver(resumeSchema),
     defaultValues: {
       template: "executive",
-      experience: [{ company: "", title: "", startDate: "", description: "" }],
+      experience: [],
       education: [{ institution: "", degree: "" }],
       skills: [],
       languages: [],
@@ -122,7 +123,7 @@ export function ResumeForm({
     control,
     name: "experience",
   });
-  const { fields: eduFields, append: appendEdu } = useFieldArray({
+  const { fields: eduFields, append: appendEdu, remove: removeEdu } = useFieldArray({
     control,
     name: "education",
   });
@@ -174,10 +175,12 @@ export function ResumeForm({
   }, [skillsText, setValue]);
 
   function onSubmit(data: ResumeInput) {
+    const normalized = normalizeResumeInput(data);
+
     startTransition(async () => {
       setOutput(null);
       setSaved(false);
-      const result = await generateResumeAction(data);
+      const result = await generateResumeAction(normalized);
 
       if (!result.success) {
         if (handleQuotaError(result)) return;
@@ -370,14 +373,34 @@ export function ResumeForm({
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
+            <p className="mb-2 text-xs text-muted-foreground">{t("experienceOptionalHint")}</p>
             {errors.experience?.message && (
               <p className="text-sm text-destructive mb-2">{errors.experience.message}</p>
             )}
+            {expFields.length === 0 && (
+              <p className="mb-3 rounded-lg border border-dashed px-4 py-3 text-sm text-muted-foreground">
+                {t("experienceEmpty")}
+              </p>
+            )}
             {expFields.map((field, i) => (
               <div key={field.id} className="rounded-lg border p-4 mb-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {t("experienceEntry", { n: i + 1 })}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeExp(i)}
+                    aria-label={t("removeEntry")}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <Input {...register(`experience.${i}.title`)} placeholder={`${t("jobTitle")} *`} />
+                    <Input {...register(`experience.${i}.title`)} placeholder={t("jobTitle")} />
                     {errors.experience?.[i]?.title && (
                       <p className="text-xs text-destructive mt-1">
                         {errors.experience[i]?.title?.message}
@@ -385,7 +408,7 @@ export function ResumeForm({
                     )}
                   </div>
                   <div>
-                    <Input {...register(`experience.${i}.company`)} placeholder={`${t("company")} *`} />
+                    <Input {...register(`experience.${i}.company`)} placeholder={t("company")} />
                     {errors.experience?.[i]?.company && (
                       <p className="text-xs text-destructive mt-1">
                         {errors.experience[i]?.company?.message}
@@ -393,7 +416,7 @@ export function ResumeForm({
                     )}
                   </div>
                   <div>
-                    <Input {...register(`experience.${i}.startDate`)} placeholder={`${t("startDate")} *`} />
+                    <Input {...register(`experience.${i}.startDate`)} placeholder={t("startDate")} />
                     {errors.experience?.[i]?.startDate && (
                       <p className="text-xs text-destructive mt-1">
                         {errors.experience[i]?.startDate?.message}
@@ -405,7 +428,7 @@ export function ResumeForm({
                 <div>
                   <Textarea
                     {...register(`experience.${i}.description`)}
-                    placeholder={`${t("roleDescription")} *`}
+                    placeholder={t("roleDescription")}
                     rows={2}
                   />
                   {errors.experience?.[i]?.description && (
@@ -414,11 +437,6 @@ export function ResumeForm({
                     </p>
                   )}
                 </div>
-                {expFields.length > 1 && (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => removeExp(i)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
               </div>
             ))}
           </div>
@@ -439,22 +457,43 @@ export function ResumeForm({
               <p className="text-sm text-destructive mb-2">{errors.education.message}</p>
             )}
             {eduFields.map((field, i) => (
-              <div key={field.id} className="grid grid-cols-2 gap-2 mb-2">
-                <div>
-                  <Input {...register(`education.${i}.institution`)} placeholder={`${t("institution")} *`} />
-                  {errors.education?.[i]?.institution && (
-                    <p className="text-xs text-destructive mt-1">
-                      {errors.education[i]?.institution?.message}
-                    </p>
+              <div key={field.id} className="rounded-lg border p-4 mb-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {t("educationEntry", { n: i + 1 })}
+                  </span>
+                  {eduFields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeEdu(i)}
+                      aria-label={t("removeEntry")}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   )}
                 </div>
-                <div>
-                  <Input {...register(`education.${i}.degree`)} placeholder={`${t("degree")} *`} />
-                  {errors.education?.[i]?.degree && (
-                    <p className="text-xs text-destructive mt-1">
-                      {errors.education[i]?.degree?.message}
-                    </p>
-                  )}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Input
+                      {...register(`education.${i}.institution`)}
+                      placeholder={`${t("institution")} *`}
+                    />
+                    {errors.education?.[i]?.institution && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.education[i]?.institution?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <Input {...register(`education.${i}.degree`)} placeholder={`${t("degree")} *`} />
+                    {errors.education?.[i]?.degree && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.education[i]?.degree?.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

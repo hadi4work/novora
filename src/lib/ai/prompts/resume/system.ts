@@ -41,6 +41,8 @@ Education: ${JSON.stringify(input.education)}
 Skills: ${input.skills.join(", ")}
 Languages: ${JSON.stringify(input.languages ?? [])}
 
+If no work experience is provided, return an empty experience array and focus the summary on education, skills, coursework, projects, and potential. Do not invent jobs.
+
 Return JSON:
 {
   "sections": {

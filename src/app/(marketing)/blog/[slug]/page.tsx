@@ -5,6 +5,7 @@ import { JsonLd, articleJsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AdsterraRectangle } from "@/components/ads/adsterra";
+import { AAdsBlogUnit } from "@/components/ads/aads";
 import { getPostBySlug, getPublishedPosts } from "@/lib/blog/posts";
 import { createMetadata } from "@/lib/seo/metadata";
 
@@ -85,10 +86,34 @@ function renderMarkdown(content: string) {
   });
 }
 
+function splitContentForMidAd(content: string) {
+  const lines = content.split("\n");
+  if (lines.length < 12) {
+    return { before: content, after: "" };
+  }
+
+  const mid = Math.floor(lines.length / 2);
+  let splitAt = mid;
+
+  for (let i = mid; i < lines.length; i++) {
+    if (lines[i].trim() === "" || lines[i].startsWith("## ")) {
+      splitAt = i;
+      break;
+    }
+  }
+
+  return {
+    before: lines.slice(0, splitAt).join("\n"),
+    after: lines.slice(splitAt).join("\n"),
+  };
+}
+
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) notFound();
+
+  const { before, after } = splitContentForMidAd(post.content);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
@@ -109,7 +134,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           : ""}
       </time>
 
-      <div className="mt-8">{renderMarkdown(post.content)}</div>
+      <div className="mt-8">
+        {renderMarkdown(before)}
+        <AAdsBlogUnit className="my-10" />
+        {after ? renderMarkdown(after) : null}
+      </div>
 
       <AdsterraRectangle className="my-8" />
 
