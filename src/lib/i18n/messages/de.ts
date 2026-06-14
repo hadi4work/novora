@@ -234,6 +234,9 @@ export const de: Messages = {
       degree: "Abschluss",
       generate: "Lebenslauf generieren",
       generating: "Generierung...",
+      enhanceContent: "KI-Inhalt verbessern & erweitern",
+      enhanceContentHint:
+        "Formuliert Ihre Notizen in professionelle CV-Sprache um und erweitert sie zu vollständigen Bullet Points. Fakten bleiben gleich — nichts wird erfunden.",
       generated: "Lebenslauf generiert!",
       exportPdf: "PDF exportieren",
       exportWord: "Word exportieren",

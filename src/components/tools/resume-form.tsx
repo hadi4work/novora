@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Sparkles, Plus, Trash2, Download, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -116,6 +117,7 @@ export function ResumeForm({
       skills: [],
       languages: [],
       photoUrl: undefined,
+      enhanceContent: true,
     },
   });
 
@@ -137,6 +139,7 @@ export function ResumeForm({
   });
 
   const template = watch("template");
+  const enhanceContent = watch("enhanceContent") ?? true;
 
   function handlePhotoChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -556,6 +559,22 @@ export function ResumeForm({
                 </Button>
               </div>
             ))}
+          </div>
+
+          <div className="flex items-start gap-3 rounded-lg border bg-muted/30 p-4">
+            <Checkbox
+              id="enhanceContent"
+              checked={enhanceContent}
+              onCheckedChange={(checked) =>
+                setValue("enhanceContent", checked === true)
+              }
+            />
+            <div className="space-y-1">
+              <Label htmlFor="enhanceContent" className="cursor-pointer">
+                {t("enhanceContent")}
+              </Label>
+              <p className="text-xs text-muted-foreground">{t("enhanceContentHint")}</p>
+            </div>
           </div>
 
           <Button type="submit" disabled={isPending} className="gap-2">

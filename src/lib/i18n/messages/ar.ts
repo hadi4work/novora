@@ -234,6 +234,9 @@ export const ar: Messages = {
       degree: "الشهادة",
       generate: "توليد السيرة",
       generating: "جاري التوليد...",
+      enhanceContent: "تحسين وتوسيع المحتوى بالذكاء الاصطناعي",
+      enhanceContentHint:
+        "يعيد صياغة ملاحظاتك بلغة سيرة احترافية ويوسّعها إلى نقاط كاملة. الحقائق تبقى كما هي — لا يُختلق شيء.",
       generated: "تم توليد السيرة!",
       exportPdf: "تصدير PDF",
       exportWord: "تصدير Word",

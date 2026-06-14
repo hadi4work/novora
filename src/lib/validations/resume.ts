@@ -109,6 +109,7 @@ export const resumeSchema = z
     skills: z.array(z.string()).min(1, "Add at least one skill"),
     languages: z.array(languageSchema).optional(),
     template: z.enum(RESUME_TEMPLATES),
+    enhanceContent: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     const educationEntries = data.education.filter(

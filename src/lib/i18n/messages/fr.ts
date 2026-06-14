@@ -234,6 +234,9 @@ export const fr: Messages = {
       degree: "Diplôme",
       generate: "Générer le CV",
       generating: "Génération...",
+      enhanceContent: "Améliorer et enrichir le contenu avec l'IA",
+      enhanceContentHint:
+        "Reformule vos notes en langage CV professionnel et les développe en puces complètes. Les faits restent identiques — rien n'est inventé.",
       generated: "CV généré !",
       exportPdf: "Exporter PDF",
       exportWord: "Exporter Word",

@@ -232,6 +232,9 @@ export const en = {
       degree: "Degree",
       generate: "Generate Resume",
       generating: "Generating...",
+      enhanceContent: "AI enhance & expand my content",
+      enhanceContentHint:
+        "Rewrites your notes into polished CV language and expands them into complete professional bullets. Your facts stay the same — nothing is invented.",
       generated: "Resume generated!",
       exportPdf: "Export PDF",
       exportWord: "Export Word",
