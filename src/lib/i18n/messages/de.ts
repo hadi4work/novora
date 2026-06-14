@@ -270,7 +270,7 @@ export const de: Messages = {
     },
     faqs: [
       { question: "Kann ich Novora kostenlos testen?", answer: "Ja. Der kostenlose Plan bietet 3 KI-Generierungen pro Tag. Keine Kreditkarte nötig." },
-      { question: "Welche Zahlungsmethoden?", answer: "Bitcoin über BTCPay Server. Sicher, on-chain verifiziert, Plan 30 Tage automatisch aktiv." },
+      { question: "Welche Zahlungsmethoden?", answer: "Alle unterstützten Kryptowährungen über BTCPay Server—including Bitcoin, Ethereum, Litecoin und mehr. Sicher, on-chain verifiziert, Plan 30 Tage automatisch aktiv." },
       { question: "Kann ich jederzeit kündigen?", answer: "Ja. Kündigung in den Einstellungen. Bezahlter Plan gilt 30 Tage pro Zahlung, manuelle Verlängerung." },
       { question: "Unterschied Pro und Business?", answer: "Business enthält alles aus Pro plus Priorität, Premium-Vorlagen und kommende Team-Funktionen." },
     ],
@@ -279,6 +279,7 @@ export const de: Messages = {
     heroBadge: "KI-gestützte Inhaltserstellung",
     heroTitle: "KI-Inhalte für Ihr Wachstum",
     heroSubtitle: "Generieren Sie Posts, Beschreibungen und Lebensläufe in Sekunden.",
+    heroMonthlyUsers: "Über 50.000 Nutzer vertrauen monatlich auf Novora.",
     heroNote: "3 kostenlose Generierungen pro Tag. Keine Kreditkarte nötig.",
     featuresPageTitle: "Funktionen",
     featuresPageSubtitle: "Drei KI-Tools auf einer Plattform. Erstellen, speichern und exportieren.",

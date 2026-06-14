@@ -25,6 +25,9 @@ export function Hero() {
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
           {t("heroSubtitle")}
         </p>
+        <p className="mx-auto mt-4 max-w-2xl text-base font-medium text-foreground/90 md:text-lg">
+          {t("heroMonthlyUsers")}
+        </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button asChild size="lg" className="gap-2">
             <Link href="/signup">

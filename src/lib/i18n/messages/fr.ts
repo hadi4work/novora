@@ -270,7 +270,7 @@ export const fr: Messages = {
     },
     faqs: [
       { question: "Puis-je essayer Novora gratuitement ?", answer: "Oui. Le forfait gratuit inclut 3 générations IA par jour. Aucune carte requise." },
-      { question: "Quels moyens de paiement acceptez-vous ?", answer: "Bitcoin via BTCPay Server. Paiement sécurisé, vérifié on-chain, plan activé automatiquement 30 jours." },
+      { question: "Quels moyens de paiement acceptez-vous ?", answer: "Toutes les cryptomonnaies prises en charge via BTCPay Server—including Bitcoin, Ethereum, Litecoin et plus. Paiement sécurisé, vérifié on-chain, forfait activé automatiquement 30 jours." },
       { question: "Puis-je annuler à tout moment ?", answer: "Oui. Annulez depuis les paramètres. Le forfait payant dure 30 jours par paiement et se renouvelle manuellement." },
       { question: "Quelle différence entre Pro et Business ?", answer: "Business inclut tout Pro plus priorité, modèles premium et fonctions équipe à venir." },
     ],
@@ -279,6 +279,7 @@ export const fr: Messages = {
     heroBadge: "Création de contenu par IA",
     heroTitle: "Du contenu IA qui fait grandir votre business",
     heroSubtitle: "Générez posts, descriptions et CV en quelques secondes.",
+    heroMonthlyUsers: "Plus de 50 000 utilisateurs font confiance à Novora chaque mois.",
     heroNote: "3 générations gratuites par jour. Aucune carte requise.",
     featuresPageTitle: "Fonctionnalités",
     featuresPageSubtitle: "Trois outils IA sur une plateforme. Créez, sauvegardez et exportez du contenu pro.",

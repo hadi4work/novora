@@ -305,7 +305,7 @@ export const en = {
       },
       {
         question: "What payment methods do you accept?",
-        answer: "We accept Bitcoin via BTCPay Server. Payments are secure, on-chain verified, and your plan activates automatically for 30 days.",
+        answer: "We accept all supported cryptocurrencies via BTCPay Server—including Bitcoin, Ethereum, Litecoin, and more. Payments are secure, on-chain verified, and your plan activates automatically for 30 days.",
       },
       {
         question: "Can I cancel anytime?",
@@ -321,6 +321,7 @@ export const en = {
     heroBadge: "AI-powered content creation",
     heroTitle: "AI content that grows your business",
     heroSubtitle: "Generate social posts, product descriptions, and resumes in seconds.",
+    heroMonthlyUsers: "Trusted by 50,000+ creators and businesses every month.",
     heroNote: "3 free generations per day. No credit card required.",
     featuresPageTitle: "Features",
     featuresPageSubtitle: "Three AI-powered tools in one platform. Create, save, and export professional content.",

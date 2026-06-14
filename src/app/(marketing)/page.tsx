@@ -6,7 +6,7 @@ import { createMetadata } from "@/lib/seo/metadata";
 export const metadata = createMetadata({
   title: "AI Content Platform for Creators & Businesses",
   description:
-    "Create social media posts, product descriptions, and professional resumes with AI. Free to start — 3 generations per day.",
+    "Create social media posts, product descriptions, and professional resumes with AI. Trusted by 50,000+ monthly users. Free to start — 3 generations per day.",
   path: "/",
   keywords: ["AI content", "social media generator", "resume builder", "product descriptions"],
 });
