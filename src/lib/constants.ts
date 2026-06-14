@@ -10,7 +10,7 @@ export const SUPPORT_EMAIL = process.env.CONTACT_EMAIL ?? "support@novora-ai.com
 
 export const FREE_DAILY_LIMIT = 3;
 export const MAX_AD_REWARDS_PER_DAY = 3;
-export const AD_WATCH_SECONDS = 15;
+export const AD_WATCH_SECONDS = 10;
 
 export const PLAN_LIMITS: Record<
   Plan,

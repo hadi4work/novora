@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
-import { Loader2, Play, Sparkles } from "lucide-react";
+import { Loader2, Play } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { claimAdReward } from "@/actions/ad-reward";
@@ -19,7 +19,23 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { AD_WATCH_SECONDS } from "@/lib/constants";
 
-type Step = "prompt" | "watching" | "claiming";
+type Step = "prompt" | "watching" | "claiming" | "no_video";
+
+function mapClaimError(
+  error: string | undefined,
+  t: (key: string) => string
+) {
+  switch (error) {
+    case "daily_ad_limit_reached":
+      return t("dailyAdLimit");
+    case "too_soon":
+      return t("watchNotComplete");
+    case "rpc_failed":
+    case "claim_failed":
+    default:
+      return t("claimFailed");
+  }
+}
 
 export function QuotaRewardDialog({
   open,
@@ -35,9 +51,10 @@ export function QuotaRewardDialog({
   const { t } = useTranslations("ads");
   const { t: tc } = useTranslations("common");
   const [step, setStep] = useState<Step>("prompt");
-  const [watchProgress, setWatchProgress] = useState(0);
-  const [secondsLeft, setSecondsLeft] = useState(AD_WATCH_SECONDS);
+  const [secondsWatched, setSecondsWatched] = useState(0);
+  const [watchAttempt, setWatchAttempt] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const claimingRef = useRef(false);
   const onRewardGrantedRef = useRef(onRewardGranted);
   const onOpenChangeRef = useRef(onOpenChange);
   const tRef = useRef(t);
@@ -50,48 +67,45 @@ export function QuotaRewardDialog({
 
   const reset = useCallback(() => {
     setStep("prompt");
-    setWatchProgress(0);
-    setSecondsLeft(AD_WATCH_SECONDS);
+    setSecondsWatched(0);
+    claimingRef.current = false;
   }, []);
 
   useEffect(() => {
     if (!open) reset();
   }, [open, reset]);
 
-  useEffect(() => {
-    if (step !== "watching") return;
+  const handleWatchComplete = useCallback(() => {
+    if (claimingRef.current) return;
+    claimingRef.current = true;
+    setStep("claiming");
 
-    const startedAt = Date.now();
-    const interval = setInterval(() => {
-      const elapsed = (Date.now() - startedAt) / 1000;
-      const progress = Math.min(100, (elapsed / AD_WATCH_SECONDS) * 100);
-      const remaining = Math.max(0, Math.ceil(AD_WATCH_SECONDS - elapsed));
-
-      setWatchProgress(progress);
-      setSecondsLeft(remaining);
-
-      if (elapsed >= AD_WATCH_SECONDS) {
-        clearInterval(interval);
-        setStep("claiming");
-        startTransition(async () => {
-          const result = await claimAdReward();
-          if (!result.success) {
-            toast.error(result.error ?? "Error");
-            setStep("prompt");
-            return;
-          }
-
-          toast.success(tRef.current("rewardGranted"), {
-            description: tRef.current("rewardGrantedDesc"),
-          });
-          onOpenChangeRef.current(false);
-          onRewardGrantedRef.current?.();
-        });
+    startTransition(async () => {
+      const result = await claimAdReward();
+      if (!result.success) {
+        toast.error(mapClaimError(result.error, tRef.current));
+        claimingRef.current = false;
+        setStep("prompt");
+        return;
       }
-    }, 200);
 
-    return () => clearInterval(interval);
-  }, [step, startTransition]);
+      toast.success(tRef.current("rewardGranted"), {
+        description: tRef.current("rewardGrantedDesc"),
+      });
+      onOpenChangeRef.current(false);
+      onRewardGrantedRef.current?.();
+    });
+  }, [startTransition]);
+
+  const watchProgress = Math.min(
+    100,
+    (secondsWatched / AD_WATCH_SECONDS) * 100
+  );
+  const secondsLeft = Math.max(
+    0,
+    Math.ceil(AD_WATCH_SECONDS - secondsWatched)
+  );
+  const timerStarted = secondsWatched > 0;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -111,7 +125,15 @@ export function QuotaRewardDialog({
             </div>
             <DialogFooter className="flex-col gap-2 sm:flex-col">
               {adRewardsRemaining > 0 ? (
-                <Button className="w-full gap-2" onClick={() => setStep("watching")}>
+                <Button
+                  className="w-full gap-2"
+                  onClick={() => {
+                    setSecondsWatched(0);
+                    claimingRef.current = false;
+                    setWatchAttempt((n) => n + 1);
+                    setStep("watching");
+                  }}
+                >
                   <Play className="h-4 w-4" />
                   {t("watchAd")}
                 </Button>
@@ -129,14 +151,49 @@ export function QuotaRewardDialog({
               <DialogTitle>{t("watchTitle")}</DialogTitle>
               <DialogDescription>{t("watchDesc")}</DialogDescription>
             </DialogHeader>
-            <HilltopAdsVideoAd />
+            <HilltopAdsVideoAd
+              key={watchAttempt}
+              onWatchProgress={setSecondsWatched}
+              onWatchComplete={handleWatchComplete}
+              onUnavailable={() => setStep("no_video")}
+            />
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">{t("timeRemaining")}</span>
-                <span className="font-medium">{secondsLeft}s</span>
+                <span className="font-medium">
+                  {timerStarted ? `${secondsLeft}s` : t("waitingForVideo")}
+                </span>
               </div>
               <Progress value={watchProgress} className="h-2" />
             </div>
+          </>
+        )}
+
+        {step === "no_video" && (
+          <>
+            <DialogHeader>
+              <DialogTitle>{t("watchTitle")}</DialogTitle>
+              <DialogDescription>{t("noVideoAvailable")}</DialogDescription>
+            </DialogHeader>
+            <div className="rounded-lg border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+              {t("noVideoAvailable")}
+            </div>
+            <DialogFooter className="flex-col gap-2 sm:flex-col">
+              <Button
+                className="w-full"
+                onClick={() => {
+                  setSecondsWatched(0);
+                  claimingRef.current = false;
+                  setWatchAttempt((n) => n + 1);
+                  setStep("watching");
+                }}
+              >
+                {t("tryAgainLater")}
+              </Button>
+              <Button variant="outline" className="w-full" onClick={() => setStep("prompt")}>
+                {tc("cancel")}
+              </Button>
+            </DialogFooter>
           </>
         )}
 
@@ -149,8 +206,7 @@ export function QuotaRewardDialog({
 
         {isPending && step !== "claiming" && (
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Sparkles className="h-4 w-4" />
-            ...
+            <Loader2 className="h-4 w-4 animate-spin" />
           </div>
         )}
       </DialogContent>

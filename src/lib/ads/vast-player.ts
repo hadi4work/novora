@@ -66,13 +66,17 @@ export function parseVastXml(xml: string): ParsedVastAd | null {
 export async function loadVastAd(tagUrl: string): Promise<ParsedVastAd> {
   const response = await fetch(tagUrl, { cache: "no-store" });
   if (!response.ok) {
-    throw new Error(`VAST request failed (${response.status})`);
+    throw new Error("no_video");
   }
 
   const xml = await response.text();
+  if (!xml.trim() || !xml.includes("<MediaFile")) {
+    throw new Error("no_video");
+  }
+
   const parsed = parseVastXml(xml);
   if (!parsed) {
-    throw new Error("VAST response did not include a playable video");
+    throw new Error("no_video");
   }
 
   return parsed;

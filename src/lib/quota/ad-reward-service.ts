@@ -48,7 +48,8 @@ export async function grantAdReward(userId: string): Promise<{
   });
 
   if (error) {
-    return { success: false, error: "Failed to grant ad reward." };
+    console.error("grant_ad_reward RPC error:", error.message);
+    return { success: false, error: "rpc_failed" };
   }
 
   const result = data as {
@@ -61,10 +62,10 @@ export async function grantAdReward(userId: string): Promise<{
   if (!result.success) {
     const message =
       result.error === "daily_ad_limit_reached"
-        ? "You have watched the maximum number of ads for today."
+        ? "daily_ad_limit_reached"
         : result.error === "too_soon"
-          ? "Please finish watching the full ad before claiming your reward."
-          : "Could not grant reward. Please try again.";
+          ? "too_soon"
+          : "claim_failed";
 
     return { success: false, error: message };
   }
