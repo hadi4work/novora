@@ -1,30 +1,69 @@
 "use client";
 
 import { useTranslations } from "@/components/providers/locale-provider";
+import { cn } from "@/lib/utils";
 
-const BRANDS = [
-  { name: "Google", logo: "/Google.svg", width: 36, height: 36, colored: true },
-  { name: "BTCPay", logo: "/trusted/btcpay.svg", width: 120, height: 32, colored: false },
-  { name: "Supabase", logo: "/trusted/supabase.svg", width: 140, height: 32, colored: false },
-  { name: "Cloudflare", logo: "/trusted/cloudflare.svg", width: 150, height: 32, colored: false },
-  { name: "Groq", logo: "/trusted/groq.svg", width: 90, height: 32, colored: false },
-] as const;
+type BrandLogoConfig = {
+  name: string;
+  logo?: string;
+  logoLight?: string;
+  logoDark?: string;
+  className?: string;
+};
 
-function BrandLogo({ brand }: { brand: (typeof BRANDS)[number] }) {
+const BRANDS: BrandLogoConfig[] = [
+  { name: "Google", logo: "/trusted/Google_Logo_0.svg", className: "h-8" },
+  { name: "BTCPay", logo: "/trusted/BTCPay_Server_idToVRZqZ0_1.svg", className: "h-9" },
+  {
+    name: "Supabase",
+    logoLight: "/trusted/Supabase_id9q7Wa4Ba_0.svg",
+    logoDark: "/trusted/Supabase_idZ_4AZztt_0.svg",
+    className: "h-7",
+  },
+  {
+    name: "Cloudflare",
+    logo: "/trusted/Cloudflare_Logo_0.svg",
+    className: "h-7 brightness-0 dark:brightness-100",
+  },
+  {
+    name: "Groq",
+    logo: "/trusted/Groq_idNEjj1u3o_0.svg",
+    className: "h-7 dark:invert",
+  },
+  {
+    name: "Meta",
+    logoLight: "/trusted/Meta_idlf4cVSsS_0.svg",
+    logoDark: "/trusted/Meta_idW0736plJ_0.svg",
+    className: "h-7",
+  },
+];
+
+function BrandLogo({ brand }: { brand: BrandLogoConfig }) {
+  const imageClass = cn("w-auto max-w-[160px] object-contain", brand.className);
+
+  if (brand.logoLight && brand.logoDark) {
+    return (
+      <div className="flex h-12 shrink-0 items-center justify-center px-8 opacity-80 transition-opacity hover:opacity-100">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={brand.logoLight}
+          alt={brand.name}
+          className={cn(imageClass, "dark:hidden")}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={brand.logoDark}
+          alt={brand.name}
+          className={cn(imageClass, "hidden dark:block")}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-12 shrink-0 items-center justify-center px-8 opacity-80 transition-opacity hover:opacity-100">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={brand.logo}
-        alt={brand.name}
-        width={brand.width}
-        height={brand.height}
-        className={
-          brand.colored
-            ? "h-8 w-auto"
-            : "h-7 w-auto opacity-70 dark:invert"
-        }
-      />
+      <img src={brand.logo!} alt={brand.name} className={imageClass} />
     </div>
   );
 }
