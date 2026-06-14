@@ -289,6 +289,16 @@ export const de: Messages = {
     startFree: "Kostenlos starten",
     viewPricing: "Preise ansehen",
     learnMoreArrow: "Mehr erfahren →",
+    trustedByTitle: "Vertraut von Teams mit",
+    testimonialsTitle: "Was unsere Nutzer sagen",
+    testimonialsSubtitle: "Schließen Sie sich Tausenden von Creators, Freelancern und Unternehmen an.",
+    testimonials: [
+      { quote: "Novora halbiert meine Zeit für Social-Media-Texte. Bildunterschriften klingen natürlich und postfertig.", name: "Sarah M.", role: "Content Creator, VAE" },
+      { quote: "Produktbeschreibungen für meinen Shop sind endlich SEO-freundlich. Verkaufsstarker Text mit einem Klick.", name: "Omar K.", role: "E-Commerce-Inhaber, Saudi-Arabien" },
+      { quote: "Professioneller Lebenslauf in Minuten — mehr Einladungen zu Vorstellungsgesprächen.", name: "Emily R.", role: "Jobsuchende, UK" },
+      { quote: "Unsere Agentur nutzt Novora täglich für Kundencontent. Konstante Qualität auf allen Plattformen.", name: "Marcus T.", role: "Marketing-Agenturleiter, Deutschland" },
+      { quote: "Einfach, schnell und günstig. Der kostenlose Plan ließ mich alles testen vor dem Pro-Upgrade.", name: "Layla H.", role: "Freelance-Texterin, Ägypten" },
+    ],
     tools: {
       social: { title: "Social-Media-Generator", description: "Instagram-, LinkedIn-, TikTok-, X- und Facebook-Texte mit Hashtags und CTAs." },
       product: { title: "Produktbeschreibungen", description: "Kurze, lange und SEO-optimierte Texte für E-Commerce." },

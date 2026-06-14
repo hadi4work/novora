@@ -289,6 +289,16 @@ export const fr: Messages = {
     startFree: "Commencer gratuitement",
     viewPricing: "Voir les tarifs",
     learnMoreArrow: "En savoir plus →",
+    trustedByTitle: "Plébiscité par des équipes utilisant",
+    testimonialsTitle: "Ce que disent nos utilisateurs",
+    testimonialsSubtitle: "Rejoignez des milliers de créateurs, freelances et entreprises.",
+    testimonials: [
+      { quote: "Novora a réduit de moitié mon temps de rédaction pour les réseaux sociaux. Des légendes naturelles et prêtes à publier.", name: "Sarah M.", role: "Créatrice de contenu, EAU" },
+      { quote: "Les descriptions produits de ma boutique sont enfin optimisées SEO. Du texte commercial en un clic.", name: "Omar K.", role: "Propriétaire e-commerce, Arabie saoudite" },
+      { quote: "CV professionnel en quelques minutes et plus d'entretiens. Chaque centime en vaut la peine.", name: "Emily R.", role: "Chercheuse d'emploi, Royaume-Uni" },
+      { quote: "Notre agence utilise Novora chaque jour pour les clients. Qualité constante sur toutes les plateformes.", name: "Marcus T.", role: "Directeur d'agence marketing, Allemagne" },
+      { quote: "Simple, rapide et abordable. Le plan gratuit m'a permis de tout tester avant Pro.", name: "Layla H.", role: "Rédactrice freelance, Égypte" },
+    ],
     tools: {
       social: { title: "Générateur réseaux sociaux", description: "Légendes Instagram, LinkedIn, TikTok, X et Facebook avec hashtags et CTA." },
       product: { title: "Descriptions produits", description: "Textes courts, longs et SEO pour e-commerce et marketplaces." },

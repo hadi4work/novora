@@ -331,6 +331,36 @@ export const en = {
     startFree: "Start free",
     viewPricing: "View pricing",
     learnMoreArrow: "Learn more →",
+    trustedByTitle: "Trusted by teams using",
+    testimonialsTitle: "What our users say",
+    testimonialsSubtitle: "Join thousands of creators, freelancers, and businesses growing with Novora.",
+    testimonials: [
+      {
+        quote: "Novora cut my social media writing time in half. The captions sound natural and ready to post.",
+        name: "Sarah M.",
+        role: "Content Creator, UAE",
+      },
+      {
+        quote: "Product descriptions for my store are finally SEO-friendly. Sales-focused copy in one click.",
+        name: "Omar K.",
+        role: "E-commerce Owner, Saudi Arabia",
+      },
+      {
+        quote: "Built a professional resume in minutes and landed more interview callbacks. Worth every penny.",
+        name: "Emily R.",
+        role: "Job Seeker, UK",
+      },
+      {
+        quote: "Our agency uses Novora daily for client content. Consistent quality across every platform.",
+        name: "Marcus T.",
+        role: "Marketing Agency Lead, Germany",
+      },
+      {
+        quote: "Simple, fast, and affordable. The free plan let me test everything before upgrading to Pro.",
+        name: "Layla H.",
+        role: "Freelance Copywriter, Egypt",
+      },
+    ],
     tools: {
       social: {
         title: "Social Media Generator",
