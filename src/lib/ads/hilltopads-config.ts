@@ -4,14 +4,13 @@ export const HILLTOPADS_SITE_VERIFICATION = {
   fileName: "dc6c0320ccffdc85735e.txt",
 } as const;
 
-/** HilltopAds Video zone — reward dialog (watch ad for +1 generation). */
+/** HilltopAds VAST tag — reward dialog (watch ad for +1 generation). */
 export const HILLTOPADS_VIDEO = {
-  scriptSrc:
-    "https://quarrelsomebitter.com/bnX.Vvstd/GPld0xY/WbcH/_eZms9su-ZiULlXkTPWT/cqxDMazcUfxrNlzWMBt/NszDEAz/NHTYER3TNjwz",
-  inlineScript: "",
+  vastTagUrl:
+    "https://nautical-hand.com/d.m/FHzcdVG-NxvWZMGjUV/tebmU9fuoZBUXlUkaPwTFcFxMM/zoY/3HMzTFMItcNdzjEIzsNGj_c/xxN_wp",
   containerId: "hilltopads-video-reward",
-};
+} as const;
 
 export function isHilltopAdsVideoConfigured() {
-  return Boolean(HILLTOPADS_VIDEO.scriptSrc || HILLTOPADS_VIDEO.inlineScript);
+  return Boolean(HILLTOPADS_VIDEO.vastTagUrl);
 }

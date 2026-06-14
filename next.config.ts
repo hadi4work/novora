@@ -16,9 +16,10 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.highperformanceformat.com https://quarrelsomebitter.com https://cdn.radiantmediatechs.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
+              "media-src 'self' https: blob:",
               // Ad networks load iframes from rotating third-party domains.
               "frame-src 'self' https:",
-              "connect-src 'self' https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com https://www.highperformanceformat.com https://quarrelsomebitter.com https:",
+              "connect-src 'self' https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com https://www.highperformanceformat.com https://quarrelsomebitter.com https://nautical-hand.com https:",
             ].join("; ") + ";",
           },
         ],
