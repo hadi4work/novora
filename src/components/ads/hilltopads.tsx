@@ -33,9 +33,7 @@ export function HilltopAdsVideoAd({
   const { t } = useTranslations("ads");
   const videoRef = useRef<HTMLVideoElement>(null);
   const firedEvents = useRef<Set<VastTrackingEvent>>(new Set());
-  const playedSecondsRef = useRef(0);
   const watchCompleteRef = useRef(false);
-  const tickIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [ad, setAd] = useState<ParsedVastAd | null>(null);
   const [state, setState] = useState<LoadState>("loading");
 
@@ -54,47 +52,30 @@ export function HilltopAdsVideoAd({
     callbacksRef.current.onUnavailable?.();
   }, []);
 
-  const stopWatchTimer = useCallback(() => {
-    if (tickIntervalRef.current) {
-      clearInterval(tickIntervalRef.current);
-      tickIntervalRef.current = null;
-    }
-  }, []);
+  const handleTimeUpdate = useCallback(
+    (video: HTMLVideoElement) => {
+      if (video.paused || video.ended || video.readyState < 2) return;
 
-  const startWatchTimer = useCallback(() => {
-    stopWatchTimer();
+      const watched = video.currentTime;
+      callbacksRef.current.onWatchProgress?.(watched);
 
-    tickIntervalRef.current = setInterval(() => {
-      const video = videoRef.current;
-      if (!video || video.paused || video.ended) return;
-
-      playedSecondsRef.current = Math.min(
-        AD_WATCH_SECONDS,
-        playedSecondsRef.current + 0.2
-      );
-
-      callbacksRef.current.onWatchProgress?.(playedSecondsRef.current);
-
-      if (
-        playedSecondsRef.current >= AD_WATCH_SECONDS &&
-        !watchCompleteRef.current
-      ) {
+      if (watched >= AD_WATCH_SECONDS && !watchCompleteRef.current) {
         watchCompleteRef.current = true;
-        stopWatchTimer();
         callbacksRef.current.onWatchComplete?.();
       }
-    }, 200);
-  }, [stopWatchTimer]);
+    },
+    []
+  );
 
   useEffect(() => {
     if (!isHilltopAdsVideoConfigured()) return;
 
     let cancelled = false;
     firedEvents.current.clear();
-    playedSecondsRef.current = 0;
     watchCompleteRef.current = false;
     setAd(null);
     setState("loading");
+    callbacksRef.current.onWatchProgress?.(0);
 
     loadVastAd(HILLTOPADS_VIDEO.vastTagUrl)
       .then((parsed) => {
@@ -109,9 +90,8 @@ export function HilltopAdsVideoAd({
 
     return () => {
       cancelled = true;
-      stopWatchTimer();
     };
-  }, [markUnavailable, stopWatchTimer]);
+  }, [markUnavailable]);
 
   useEffect(() => {
     if (state !== "ready" || !ad) return;
@@ -121,9 +101,18 @@ export function HilltopAdsVideoAd({
     const video = videoRef.current;
     if (!video) return;
 
-    void video.play().catch(() => {
-      setState("paused");
-    });
+    const onCanPlay = () => {
+      void video.play().catch(() => {
+        setState("paused");
+      });
+    };
+
+    if (video.readyState >= 3) {
+      onCanPlay();
+    } else {
+      video.addEventListener("canplay", onCanPlay, { once: true });
+      return () => video.removeEventListener("canplay", onCanPlay);
+    }
   }, [state, ad]);
 
   const trackOnce = (event: VastTrackingEvent) => {
@@ -172,14 +161,12 @@ export function HilltopAdsVideoAd({
           onPlay={() => {
             setState("playing");
             trackOnce("start");
-            startWatchTimer();
           }}
-          onPause={() => {
-            setState("paused");
-            stopWatchTimer();
-          }}
+          onPause={() => setState("paused")}
           onTimeUpdate={(event) => {
             const video = event.currentTarget;
+            handleTimeUpdate(video);
+
             const duration = video.duration || ad.duration || 0;
             if (!duration) return;
 
@@ -188,13 +175,8 @@ export function HilltopAdsVideoAd({
             if (progress >= 0.5) trackOnce("midpoint");
             if (progress >= 0.75) trackOnce("thirdQuartile");
           }}
-          onEnded={() => {
-            trackOnce("complete");
-            stopWatchTimer();
-          }}
-          onError={() => {
-            markUnavailable();
-          }}
+          onEnded={() => trackOnce("complete")}
+          onError={() => markUnavailable()}
         />
       )}
     </div>

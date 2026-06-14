@@ -367,7 +367,7 @@ export const en = {
     noRewards: "No ad rewards remaining today.",
     watchAd: "Watch ad for +1 generation",
     watchTitle: "Watch the ad",
-    watchDesc: "The timer starts when the video plays. Your reward unlocks after 10 seconds of watching.",
+    watchDesc: "The timer follows actual video playback. Your reward unlocks after 10 seconds of video time.",
     timeRemaining: "Time remaining",
     waitingForVideo: "Waiting for video...",
     noVideoAvailable: "No videos available right now. Try again later.",

@@ -105,7 +105,7 @@ export function QuotaRewardDialog({
     0,
     Math.ceil(AD_WATCH_SECONDS - secondsWatched)
   );
-  const timerStarted = secondsWatched > 0;
+  const timerStarted = secondsWatched > 0.3;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
