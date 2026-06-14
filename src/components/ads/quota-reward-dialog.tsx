@@ -38,13 +38,20 @@ export function QuotaRewardDialog({
   const [watchProgress, setWatchProgress] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(AD_WATCH_SECONDS);
   const [isPending, startTransition] = useTransition();
-  const watchStarted = useRef(false);
+  const onRewardGrantedRef = useRef(onRewardGranted);
+  const onOpenChangeRef = useRef(onOpenChange);
+  const tRef = useRef(t);
+
+  useEffect(() => {
+    onRewardGrantedRef.current = onRewardGranted;
+    onOpenChangeRef.current = onOpenChange;
+    tRef.current = t;
+  }, [onRewardGranted, onOpenChange, t]);
 
   const reset = useCallback(() => {
     setStep("prompt");
     setWatchProgress(0);
     setSecondsLeft(AD_WATCH_SECONDS);
-    watchStarted.current = false;
   }, []);
 
   useEffect(() => {
@@ -52,8 +59,7 @@ export function QuotaRewardDialog({
   }, [open, reset]);
 
   useEffect(() => {
-    if (step !== "watching" || watchStarted.current) return;
-    watchStarted.current = true;
+    if (step !== "watching") return;
 
     const startedAt = Date.now();
     const interval = setInterval(() => {
@@ -72,19 +78,20 @@ export function QuotaRewardDialog({
           if (!result.success) {
             toast.error(result.error ?? "Error");
             setStep("prompt");
-            watchStarted.current = false;
             return;
           }
 
-          toast.success(t("rewardGranted"), { description: t("rewardGrantedDesc") });
-          onOpenChange(false);
-          onRewardGranted?.();
+          toast.success(tRef.current("rewardGranted"), {
+            description: tRef.current("rewardGrantedDesc"),
+          });
+          onOpenChangeRef.current(false);
+          onRewardGrantedRef.current?.();
         });
       }
     }, 200);
 
     return () => clearInterval(interval);
-  }, [step, onOpenChange, onRewardGranted, t]);
+  }, [step, startTransition]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -122,7 +129,7 @@ export function QuotaRewardDialog({
               <DialogTitle>{t("watchTitle")}</DialogTitle>
               <DialogDescription>{t("watchDesc")}</DialogDescription>
             </DialogHeader>
-            <HilltopAdsVideoAd key={`reward-ad-${open}-${step}`} />
+            <HilltopAdsVideoAd />
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">{t("timeRemaining")}</span>
