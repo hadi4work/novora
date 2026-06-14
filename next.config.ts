@@ -13,11 +13,12 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.highperformanceformat.com https://quarrelsomebitter.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.highperformanceformat.com https://quarrelsomebitter.com https://cdn.radiantmediatechs.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
-              "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.highperformanceformat.com https://quarrelsomebitter.com",
-              "connect-src 'self' https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com https://www.highperformanceformat.com https://quarrelsomebitter.com",
+              // Ad networks load iframes from rotating third-party domains.
+              "frame-src 'self' https:",
+              "connect-src 'self' https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com https://www.highperformanceformat.com https://quarrelsomebitter.com https:",
             ].join("; ") + ";",
           },
         ],

@@ -6,17 +6,9 @@ export const HILLTOPADS_SITE_VERIFICATION = {
 
 /** HilltopAds Video zone — reward dialog (watch ad for +1 generation). */
 export const HILLTOPADS_VIDEO = {
-  scriptSrc: "",
-  inlineScript: `(function(tjen){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = tjen || {};
-s.src = "\\/\\/quarrelsomebitter.com\\/bnX.Vvstd\\/GPld0xY\\/WbcH\\/_eZms9su-ZiULlXkTPWT\\/cqxDMazcUfxrNlzWMBt\\/NszDEAz\\/NHTYER3TNjwz";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})`,
+  scriptSrc:
+    "https://quarrelsomebitter.com/bnX.Vvstd/GPld0xY/WbcH/_eZms9su-ZiULlXkTPWT/cqxDMazcUfxrNlzWMBt/NszDEAz/NHTYER3TNjwz",
+  inlineScript: "",
   containerId: "hilltopads-video-reward",
 };
 

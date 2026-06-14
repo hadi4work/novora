@@ -12,22 +12,24 @@ export function HilltopAdsVideoAd({ className }: { className?: string }) {
 
   useEffect(() => {
     if (!isHilltopAdsVideoConfigured() || loadedRef.current) return;
-    loadedRef.current = true;
 
     const target = containerRef.current;
     if (!target) return;
 
-    if (HILLTOPADS_VIDEO.inlineScript) {
-      const script = document.createElement("script");
-      script.type = "text/javascript";
-      script.text = HILLTOPADS_VIDEO.inlineScript;
-      target.appendChild(script);
-    }
+    loadedRef.current = true;
+    target.innerHTML = "";
 
     if (HILLTOPADS_VIDEO.scriptSrc) {
       const script = document.createElement("script");
+      script.type = "text/javascript";
       script.async = true;
+      script.referrerPolicy = "no-referrer-when-downgrade";
       script.src = HILLTOPADS_VIDEO.scriptSrc;
+      target.appendChild(script);
+    } else if (HILLTOPADS_VIDEO.inlineScript) {
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.text = HILLTOPADS_VIDEO.inlineScript;
       target.appendChild(script);
     }
 

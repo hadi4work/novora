@@ -122,7 +122,7 @@ export function QuotaRewardDialog({
               <DialogTitle>{t("watchTitle")}</DialogTitle>
               <DialogDescription>{t("watchDesc")}</DialogDescription>
             </DialogHeader>
-            <HilltopAdsVideoAd />
+            <HilltopAdsVideoAd key={`reward-ad-${open}-${step}`} />
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">{t("timeRemaining")}</span>

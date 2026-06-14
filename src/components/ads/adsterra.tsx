@@ -25,24 +25,21 @@ function AdsterraBanner({
     if (!container) return;
 
     container.innerHTML = "";
+    container.id = `adsterra-${adKey}-${instanceId.replace(/:/g, "")}`;
 
-    const optionsScript = document.createElement("script");
-    optionsScript.type = "text/javascript";
-    optionsScript.text = `
-      atOptions = {
-        'key' : '${adKey}',
-        'format' : 'iframe',
-        'height' : ${height},
-        'width' : ${width},
-        'params' : {}
-      };
-    `;
+    (window as Window & { atOptions?: Record<string, unknown> }).atOptions = {
+      key: adKey,
+      format: "iframe",
+      height,
+      width,
+      params: {},
+    };
 
     const invokeScript = document.createElement("script");
+    invokeScript.type = "text/javascript";
     invokeScript.src = `https://www.highperformanceformat.com/${adKey}/invoke.js`;
     invokeScript.async = true;
 
-    container.appendChild(optionsScript);
     container.appendChild(invokeScript);
 
     return () => {
