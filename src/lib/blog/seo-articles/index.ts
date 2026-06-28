@@ -12,6 +12,8 @@ import { article11 } from "@/lib/blog/seo-articles/article-11-video-ad-hooks";
 import { article12 } from "@/lib/blog/seo-articles/article-12-video-ad-script-guide";
 import { article13 } from "@/lib/blog/seo-articles/article-13-tiktok-reels-ecommerce-scripts";
 import { article14 } from "@/lib/blog/seo-articles/article-14-ai-video-ad-scripts";
+import { article15 } from "@/lib/blog/seo-articles/article-15-ai-ad-script-generator-guide";
+import { article16 } from "@/lib/blog/seo-articles/article-16-video-ad-script-affiliates";
 import type { BlogPost } from "@/types";
 
 export const SEO_BLOG_ARTICLES: BlogPost[] = [
@@ -29,6 +31,8 @@ export const SEO_BLOG_ARTICLES: BlogPost[] = [
   article12,
   article13,
   article14,
+  article15,
+  article16,
 ].sort(
   (a, b) =>
     new Date(b.published_at ?? 0).getTime() - new Date(a.published_at ?? 0).getTime()
