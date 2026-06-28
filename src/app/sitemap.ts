@@ -1,8 +1,6 @@
 import type { MetadataRoute } from "next";
 import { APP_URL } from "@/lib/constants";
-import { getSitemapPosts } from "@/lib/seo/sitemap-posts";
-
-export const revalidate = 86400;
+import { getAllSitemapBlogSlugs } from "@/lib/seo/sitemap-blog-slugs";
 
 const STATIC_PAGES: {
   path: string;
@@ -23,27 +21,36 @@ const STATIC_PAGES: {
   { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
 ];
 
-function toLastModified(value: string | null | undefined): Date {
-  const parsed = value ? new Date(value) : new Date();
-  return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
-}
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getSitemapPosts();
+function buildSitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
+  const blogSlugs = getAllSitemapBlogSlugs();
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PAGES.map((page) => ({
     url: `${APP_URL}${page.path}`,
-    lastModified: new Date(),
+    lastModified,
     changeFrequency: page.changeFrequency,
     priority: page.priority,
   }));
 
-  const blogEntries: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${APP_URL}/blog/${post.slug}`,
-    lastModified: toLastModified(post.updated_at ?? post.published_at),
+  const blogEntries: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+    url: `${APP_URL}/blog/${slug}`,
+    lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
   }));
 
   return [...staticEntries, ...blogEntries];
+}
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  try {
+    return buildSitemap();
+  } catch {
+    return STATIC_PAGES.map((page) => ({
+      url: `${APP_URL}${page.path}`,
+      lastModified: new Date(),
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+    }));
+  }
 }
